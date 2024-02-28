@@ -12,7 +12,7 @@ if __name__ == '__main__':
     parser.add_argument('-epochs',   type=int, default=10,  help="number of epoch")
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
-    parser.add_argument('-rpath',   type=str, default="/home/retina/dembysj/Dropbox/WCCI2024/challenges/ETSS-01-Edge-TSS/src/aic23/track_5/", help="path to results")
+    parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
     args = parser.parse_args()
 
     # Initialize weights and bias
