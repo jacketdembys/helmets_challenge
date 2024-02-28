@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: jacket-yolov8-pod
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+            - NVIDIA-A10
+            - NVIDIA-GeForce-RTX-3090
+  containers:
+  - name: gpu-container
+    image: gitlab-registry.nrp-nautilus.io/yg5d6/yolov8
+    command: ["sleep", "infinity"]
+    resources:
+      limits:
+        memory: "32G"
+        cpu: "8"
+        nvidia.com/gpu: "1"
+      requests:
+        memory: "32G"
+        cpu: "8"
+        nvidia.com/gpu: "1"

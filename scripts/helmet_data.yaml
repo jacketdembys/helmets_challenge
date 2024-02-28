@@ -1,0 +1,23 @@
+# Train/val/test sets as 
+# 1) dir: path/to/imgs, 
+# 2) file: path/to/imgs.txt, or 
+# 3) list: [path/to/imgs1, path/to/imgs2, ..]
+
+#path: /home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5_train/aicity2024_track5_train
+path: /home/retina/dembysj/Dropbox/WCCI2024/challenges/ETSS-01-Edge-TSS/src/aic23/track_5/src/detectors/ultralytics/data/crop_yolo_data
+train: train/images 
+val: train/images
+test: # test images (optional)
+
+# Classes
+# classid_helmet = {1: 'motorbike', 2: 'DHelmet', 3: 'DNoHelmet', 4: 'P1Helmet', 5: 'P1NoHelmet', 6: 'DHelmet', 7: 'DNoHelmet', 8: 'P0Helmet', 9: 'P0NoHelmet'} 
+names:
+  0: motorbike
+  1: DHelmet
+  2: DNoHelmet
+  3: P1Helmet
+  4: P1NoHelmet
+  5: P2Helmet
+  6: P2NoHelmet
+  7: P0Helmet
+  8: P0NoHelmet
