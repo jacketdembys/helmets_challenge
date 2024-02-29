@@ -8,6 +8,7 @@ from wandb.integration.ultralytics import add_wandb_callback
 if __name__ == '__main__':
     # Another helmet dataset: https://osf.io/4pwj8/
     parser = argparse.ArgumentParser(description="yolov8x helmet experiment")
+    parser.add_argument('-config', type=str, default="helmet_data.yaml",  help="config file for model training")
     parser.add_argument('-devices', type=int, default=1,  help="number of gpus")
     parser.add_argument('-epochs',   type=int, default=10,  help="number of epoch")
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
@@ -35,10 +36,10 @@ if __name__ == '__main__':
     add_wandb_callback(model)
 
     # Train the model
-    results = model.train(data="helmet_data.yaml", 
+    results = model.train(data=args.config, 
                         device=device,
                         epochs=args.epochs,
                         batch=args.bs,
                         imgsz=args.imgsz,
-                        project=os.path.join(args.rpath, "results"),
+                        project=os.path.join(args.rpath),
                         verbose=True)
