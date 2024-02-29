@@ -1,9 +1,9 @@
 import torch, json, wandb, contextlib, argparse
 import torch.nn as nn
 import ultralytics.nn.tasks as tasks
-from utils import get_image_id
-from pycocotools.coco import COCO
-from pycocotools.cocoeval import COCOeval
+#from utils import get_image_id
+#from pycocotools.coco import COCO
+#from pycocotools.cocoeval import COCOeval
 from ultralytics.utils import LOGGER, RANK, colorstr
 from ultralytics.nn.tasks import DetectionModel, attempt_load_one_weight
 from ultralytics.data.augment import Albumentations
