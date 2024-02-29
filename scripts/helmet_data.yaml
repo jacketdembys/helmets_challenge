@@ -4,7 +4,7 @@
 # 3) list: [path/to/imgs1, path/to/imgs2, ..]
 
 #path: /home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5_train/aicity2024_track5_train
-path: /home/retina/dembysj/Dropbox/WCCI2024/challenges/ETSS-01-Edge-TSS/src/aic23/track_5/src/detectors/ultralytics/data/crop_yolo_data
+path: /home/dataset
 train: train/images 
 val: train/images
 test: # test images (optional)

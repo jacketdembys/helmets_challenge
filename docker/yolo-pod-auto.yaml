@@ -15,7 +15,14 @@ spec:
   containers:
   - name: gpu-container
     image: gitlab-registry.nrp-nautilus.io/udembys/yolo
-    command: ["sleep", "infinity"]
+    command: ["/bin/bash", "-c"]
+    args: ["cd /home;
+            git clone https://github.com/jacketdembys/iksolver.git;
+            cd iksolver/;
+            wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
+            python create_experiments.py --layers 10 --neurons 1024 --scale 10 --load cloud;
+            python ik-solver.py --config-path train.yaml; 
+            sleep infinity"]
     resources:
       limits:
         memory: 32Gi
