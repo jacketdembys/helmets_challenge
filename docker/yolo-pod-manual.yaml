@@ -12,6 +12,10 @@ spec:
             operator: In
             values:
             - NVIDIA-GeForce-RTX-3090
+  volumes:
+  - name: dshm
+    emptyDir:
+      medium: Memory
   containers:
   - name: gpu-container
     image: gitlab-registry.nrp-nautilus.io/udembys/yolo
@@ -25,3 +29,6 @@ spec:
         memory: 32Gi
         cpu: 8
         nvidia.com/gpu: 1
+    volumeMounts:
+    - name: dshm
+      mountPath: /dev/shm

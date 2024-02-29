@@ -33,7 +33,7 @@ if __name__ == '__main__':
     model.to(device)
 
     # Visualize on Wandb the model
-    add_wandb_callback(model)
+    #add_wandb_callback(model)
 
     # Train the model
     results = model.train(data=args.config, 
