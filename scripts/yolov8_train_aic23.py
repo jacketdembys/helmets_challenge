@@ -98,7 +98,7 @@ if __name__ == '__main__':
                       model="yolov8x.yaml", 
                       data=args.config,
                       device=device, 
-                      epochs=args.epoch, 
+                      epochs=args.epochs, 
                       batch=args.bs, 
                       fraction=args.frac, 
                       imgsz=640,
