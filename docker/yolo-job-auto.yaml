@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: yolo-job-jacket
   labels:
-    k8s-app: yolo-job-jacket
+    k8s-app: yolo-job-jacket-hr
 spec:
   ttlSecondsAfterFinished: 100
   template:
