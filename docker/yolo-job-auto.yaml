@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket
+  name: yolo-job-jacket-hr
   labels:
-    k8s-app: yolo-job-jacket-hr
+    k8s-app: yolo-job-jacket
 spec:
   ttlSecondsAfterFinished: 100
   template:
