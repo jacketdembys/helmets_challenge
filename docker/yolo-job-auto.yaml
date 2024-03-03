@@ -20,9 +20,19 @@ spec:
                     operator: In
                     values:
                     - NVIDIA-A100-SXM4-80GB
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
       containers:
-      - name: mypod
+      - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/udembys/yolo
+        command: ["/bin/sh", "-c"]
+        args: ["cd /home;
+            git clone https://github.com/jacketdembys/helmets_challenge.git;
+            cd helmets_challenge/scripts/;
+            wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
+            python train_yolov8.py"]
         resources:
           limits:
             memory: "32Gi"
@@ -32,10 +42,7 @@ spec:
             memory: "32Gi"
             cpu: "10"
             nvidia.com/gpu: "1"
-        command: ["/bin/sh", "-c"]
-        args: ["cd /home;
-            git clone https://github.com/jacketdembys/helmets_challenge.git;
-            cd helmets_challenge/scripts/;
-            wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python train_yolov8.py"]
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
       restartPolicy: Never
