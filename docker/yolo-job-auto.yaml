@@ -19,8 +19,7 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                    - NVIDIA-A10
-                    - NVIDIA-GeForce-RTX-3090
+                    - NVIDIA-A100-SXM4-80GB
       containers:
       - name: mypod
         image: gitlab-registry.nrp-nautilus.io/udembys/yolo
@@ -38,5 +37,5 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python yolov8_train_aic23.py"]
+            python train_yolov8.py"]
       restartPolicy: Never

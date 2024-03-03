@@ -79,13 +79,13 @@ if __name__ == '__main__':
 
 
     # Initialize weights and bias
-    wandb.init(
-        entity="jacketdembys",
-        project = "ai-city-challenge",                
-        group = 'Test-0-Playing-With-The-API',
-        name = "Test-Inference",
-        job_type = "baseline"
-    )
+    # wandb.init(
+    #    entity="jacketdembys",
+    #    project = "ai-city-challenge",                
+    #    group = 'Test-0-Playing-With-The-API',
+    #    name = "Test-Inference",
+    #    job_type = "baseline"
+    # )
 
     # Load a model and export to onnx format: the model is visualize in the Netron app: https://netron.app
     #yolo_v8 = "x"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
