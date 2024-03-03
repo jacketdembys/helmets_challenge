@@ -101,7 +101,7 @@ if __name__ == '__main__':
                       epochs=args.epochs, 
                       batch=args.bs, 
                       fraction=args.frac, 
-                      imgsz=640,
+                      imgsz=[1920,1080],
                       exist_ok=True,
                       val=True, 
                       save_json=True, 
