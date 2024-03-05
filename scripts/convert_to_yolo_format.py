@@ -294,7 +294,9 @@ def main():
     #convert_to_yolo_format_2(gt_txt, output_gt_dir)
 
     # gather images in one folder
-    #gather_images(path_img_dir, output_img_dir)
+    path_img_dir = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old"
+    output_img_dir = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images"
+    gather_images(path_img_dir, output_img_dir)
 
     # check the img and label pairs
     #check_img_label_pairs(output_img_dir, output_gt_dir)
@@ -312,14 +314,14 @@ def main():
 
     ## Load from the groundtruth file 
     # 〈video_id〉, 〈frame〉, 〈bb_left〉, 〈bb_top〉, 〈bb_width〉, 〈bb_height〉, 〈class〉
-    gt = pd.read_csv(gt_txt, header=None)
-    print(len(gt))
+    #gt = pd.read_csv(gt_txt, header=None)
+    #print(len(gt))
 
     ## Convert to correct YOLO format
     #convert_to_YOLO_format(gt_txt, output_gt_dir, output_img_dir)
 
     ## Check that the images
-    gather_YOLO_images(path_img_dir, output_gt_dir, output_img_dir)
+    #gather_YOLO_images(path_img_dir, output_gt_dir, output_img_dir)
     
 
 if __name__ == '__main__':

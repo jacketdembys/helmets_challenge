@@ -7,19 +7,21 @@ from ultralytics import YOLO
 inference_on = "images" # images / videos
 
 # Load a model
-yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
-model = YOLO("yolov8"+yolo_v8+".pt")  # load a nano model
+#yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
+#model = YOLO("yolov8"+yolo_v8+".pt")  # load a pretrained model
+model = YOLO("baseline_helmet_yolov8.pt")
 
 # Predict with loaded model
-path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5_train/aicity2024_track5_train/images/"
+path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images/"
 path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/ETSS-01-Edge-TSS/src/aic23/track_5/"
-video_id = 2
+video_id = 64
 image_folder = "00"+str(video_id)+"/"
 image_name = "00000100.jpg" 
 results = model.predict(
-	source=path_data+image_folder+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
+	source=path_data #+image_folder #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
 	conf=0.25,
-	project=path_results+"results/",
+	#project=path_results+"results/",
+	project="results/",
 	name=image_folder,								 
 	save=True,  									# save plot result
 	save_crop=True,
