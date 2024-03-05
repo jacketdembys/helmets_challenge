@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: yolo-job-jacket-2
+  labels:
+    k8s-app: yolo-job-jacket
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      labels:
+        k8s-app: yolo-job-jacket
+    spec:
+      tolerations:
+      - key: nautilus.io/mizzou-vigir
+        operator: Exists
+        effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - gpn-fiona-mizzou-2.rnet.missouri.edu
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-A100-SXM4-80GB
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/udembys/yolo
+        command: ["/bin/sh", "-c"]
+        args: ["cd /home;
+            git clone https://github.com/jacketdembys/helmets_challenge.git;
+            cd helmets_challenge/scripts/;
+            wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
+            python train_yolov8.py -epochs 500 -imgsz 640"]
+        resources:
+          limits:
+            memory: "32Gi"
+            cpu: "10"
+            nvidia.com/gpu: "1"
+          requests:
+            memory: "32Gi"
+            cpu: "10"
+            nvidia.com/gpu: "1"
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+      restartPolicy: Never
