@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-2
+  name: yolo-job-jacket-l
   labels:
     k8s-app: yolo-job-jacket
 spec:
@@ -40,7 +40,7 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python train_yolov8.py -epochs 500 -imgsz 640"]
+            python train_yolov8.py -epochs 100 -imgsz 640"]
         resources:
           limits:
             memory: "32Gi"
