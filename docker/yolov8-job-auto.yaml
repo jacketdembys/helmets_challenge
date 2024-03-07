@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-ll
+  name: yolo-job-jacket-s
   labels:
     k8s-app: yolo-job-jacket
 spec:
@@ -19,7 +19,7 @@ spec:
                   - key: nvidia.com/gpu.product
                     operator: In
                     values:
-                    - NVIDIA-A100-SXM4-80GB
+                    - NVIDIA-GeForce-RTX-3090
       volumes:
       - name: dshm
         emptyDir:
