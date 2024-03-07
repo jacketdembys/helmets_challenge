@@ -51,7 +51,7 @@ from ultralytics.nn.modules import (
 # Build a custom YOLO model
 def load_model_custom(self, cfg=None, weights=None, verbose=True):
   """Return a YOLO detection model."""
-  weights, _ = attempt_load_one_weight("yolov8n.pt") 
+  weights, _ = attempt_load_one_weight("yolov8l.pt") 
   model = DetectionModel(cfg, nc=self.data["nc"], verbose=verbose and RANK == -1)
   if weights:
     model.load(weights)
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="yolov8n", help="run name")
+    parser.add_argument('-name',    type=str,   default="yolov8l", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     train_args = dict(project=args.project, 
                       name=args.name,
-                      model="yolov8n.yaml", 
+                      model="yolov8l.yaml", 
                       data=args.config,
                       device=device, 
                       epochs=args.epochs, 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
                       exist_ok=True,
                       val=True, 
                       #save_json=True, 
-                      #conf=0.5, 
+                      conf=1.5, 
                       #iou=0.5,
                       #optimizer="Adam", 
                       #seed=0,
