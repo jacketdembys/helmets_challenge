@@ -105,7 +105,7 @@ if __name__ == '__main__':
                       exist_ok=True,
                       val=True, 
                       #save_json=True, 
-                      conf=1.5, 
+                      conf=0.15, 
                       #iou=0.5,
                       #optimizer="Adam", 
                       #seed=0,
