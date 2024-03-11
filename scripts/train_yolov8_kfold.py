@@ -44,4 +44,14 @@ if __name__ == '__main__':
 
   # Replace 'nan' values with '0.0'
   labels_df = labels_df.fillna(0.0)
-  print(labels_df)
+  #print(labels_df)
+
+
+  # K-Fold dataset split (setting random_state for repeatable results)
+  ksplit = 10
+  kf = KFold(n_splits=ksplit, 
+             shuffle=True, 
+             random_state=352023)
+
+  kfolds = list(kf.split(labels_df))
+  print(kfolds)
