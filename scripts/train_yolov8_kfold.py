@@ -15,3 +15,4 @@ if __name__ == '__main__':
   # Retrieve all labels for the dataset
   dataset_path = Path('/home/dataset')
   labels = sorted(dataset_path.rglob("*labels/*.txt"))
+  print(labels)
