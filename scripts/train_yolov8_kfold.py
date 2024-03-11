@@ -22,4 +22,9 @@ if __name__ == '__main__':
   with open(yaml_file, 'r', encoding="utf8") as y:
     classes = yaml.safe_load(y)['names']
   cls_idx = sorted(classes.keys())
-  print(cls_idx)
+  #print(cls_idx)
+
+  # Initialize an empty pandas dataframe
+  indx = [l.stem for l in labels]           # use base filename as ID (no extension)
+  labels_df = pd.DataFrame([], columns=cls_idx, index=indx)
+  print(labels_df)
