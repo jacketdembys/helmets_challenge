@@ -27,4 +27,21 @@ if __name__ == '__main__':
   # Initialize an empty pandas dataframe
   indx = [l.stem for l in labels]           # use base filename as ID (no extension)
   labels_df = pd.DataFrame([], columns=cls_idx, index=indx)
+  #print(labels_df)
+
+  # Count the instance of each class label present in the annotation files
+  for label in labels:
+    lbl_counter = Counter()
+
+    with open(label, 'r') as lf:
+      lines = lf.readlines()
+
+    for l in lines:
+      # Classes for YOLO label uses integer at first position of each line
+      lbl_counter[int(l.split(' ')[0])] += 1
+
+    labels_df.loc[label.stem] = lbl_counter
+
+  # Replace 'nan' values with '0.0'
+  labels_df = labels_df.fillna(0.0)
   print(labels_df)
