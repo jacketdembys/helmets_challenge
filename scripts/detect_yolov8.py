@@ -30,11 +30,10 @@ if __name__ == "__main__":
 	add_wandb_callback(model)
 
 	# Predict with loaded model
-	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
+	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
+	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/"
 	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
-	path_results="results/"
-	
-
+	path_results="results/"	
 
 	# Loop through all the video folders
 	for id in range(1, 101):
@@ -46,9 +45,8 @@ if __name__ == "__main__":
 			image_folder = "0"+str(video_id)+"/"
 		elif len(str(id)) == 3:
 			image_folder = str(video_id)+"/"
-
 			
-		image_name = "00000100.jpg" 
+		#image_name = "00000100.jpg" 
 		results = model.predict(
 			source=path_data+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
 			conf=0.25,

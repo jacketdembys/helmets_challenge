@@ -49,9 +49,24 @@ if __name__ == '__main__':
 
   # K-Fold dataset split (setting random_state for repeatable results)
   ksplit = 10
-  kf = KFold(n_splits=ksplit, 
-             shuffle=True, 
-             random_state=352023)
-
+  kf = KFold(n_splits=ksplit, shuffle=True, random_state=352023)
   kfolds = list(kf.split(labels_df))
-  print(kfolds)
+  
+  # Display the splits more clearly 
+  folds = [f'split_{n}' for n in range(1, ksplit + 1)]
+  folds_df = pd.DataFrame(index=indx, columns=folds)
+
+  for idx, (train, val) in enumerate(kfolds, start=1):
+    folds_df[f'split_{idx}'].loc[labels_df.iloc[train].index] = 'train'
+    folds_df[f'split_{idx}'].loc[labels_df.iloc[val].index] = 'val'
+
+  # Calculate the distribution of class labels for each fold
+  fold_lbl_distrb = pd.DataFrame(index=folds, columns=cls_idx)
+
+  for n, (train_indices, val_indices) in enumerate(kfolds, start=1):
+    train_totals = labels_df.iloc[train_indices].sum()
+    val_totals = labels_df.iloc[val_indices].sum()
+
+    
+
+
