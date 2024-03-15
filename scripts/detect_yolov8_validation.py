@@ -31,7 +31,8 @@ if __name__ == "__main__":
 	add_wandb_callback(model)
 
 	# Predict with loaded model
-	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images/fold2"
+	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images/fold2"
+	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/train/image_folds/fold2/"
 	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
 	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/images/"
 	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
@@ -52,10 +53,10 @@ if __name__ == "__main__":
 			
 	#image_name = "00000100.jpg" 
 	results = model.predict(
-		source=path_data, #+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
+		source=path_data + "095_00000158.jpg", #+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
 		conf=0.25,
 		project="results",
-		name="test_images_0.25",  #image_folder,								 
+		name="train_images_0.25",  #image_folder,								 
 		save=True,  									# save plot result
         save_frames=True,
 		save_crop=True,
