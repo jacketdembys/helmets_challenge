@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-0.05
+  name: yolo-job-jacket-freeze-layers
   labels:
-    k8s-app: yolo-job-jacket-freeze-layers
+    k8s-app: yolo-job-jacket
 spec:
   ttlSecondsAfterFinished: 100
   template:
