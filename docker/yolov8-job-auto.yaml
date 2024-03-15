@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: yolo-job-jacket-0.05
   labels:
-    k8s-app: yolo-job-jacket
+    k8s-app: yolo-job-jacket-freeze-layers
 spec:
   ttlSecondsAfterFinished: 100
   template:
@@ -31,7 +31,6 @@ spec:
         args: ["cd /home;
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
-            mv conv.py /usr/local/ultralytics/ultralytics/nn/modules/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
             python train_yolov8.py -epochs 100 -imgsz 640"]
         resources:
