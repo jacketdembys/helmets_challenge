@@ -114,22 +114,21 @@ if __name__ == '__main__':
                       #cls=0.125, 
                       #dfl=3.0,
                       #close_mosaic=0,
-                      #hsv_h: 0.015, # (float) image HSV-Hue augmentation (fraction)
-                      #hsv_s: 0.7, # (float) image HSV-Saturation augmentation (fraction)
-                      #hsv_v: 0.4, # (float) image HSV-Value augmentation (fraction)
-                      #degrees: 0.0, # (float) image rotation (+/- deg)
-                      #translate: 0.1, # (float) image translation (+/- fraction)
-                      #scale: 0.5, # (float) image scale (+/- gain)
-                      #shear: 0.0, # (float) image shear (+/- deg)
-                      #perspective: 0.0, # (float) image perspective (+/- fraction), range 0-0.001
-                      #flipud: 0.0, # (float) image flip up-down (probability)
-                      #fliplr: 0.5, # (float) image flip left-right (probability)
-                      #mosaic: 1.0, # (float) image mosaic (probability)
-                      #mixup: 0.0, # (float) image mixup (probability)
-                      #copy_paste: 0.0, # (float) segment copy-paste (probability)
-                      #auto_augment: randaugment, # (str) auto augmentation policy for classification (randaugment, autoaugment, augmix)
-                      #erasing: 0.4, # (float) probability of random erasing during classification training (0-1)
-                      #crop_fraction: 1.0, # (float) image crop fraction for classification evaluation/inference (0-1)
+                      hsv_h=0.5, # (float) image HSV-Hue augmentation (fraction)
+                      hsv_s=0.8, # (float) image HSV-Saturation augmentation (fraction)
+                      hsv_v=0.8, # (float) image HSV-Value augmentation (fraction)
+                      degrees=90.0, # (float) image rotation (+/- deg)
+                      translate=0.5, # (float) image translation (+/- fraction)
+                      scale=5.0, # (float) image scale (+/- gain)
+                      shear=90.0, # (float) image shear (+/- deg)
+                      perspective=0.0005, # (float) image perspective (+/- fraction), range 0-0.001
+                      flipud=0.5, # (float) image flip up-down (probability)
+                      fliplr=0.8, # (float) image flip left-right (probability)
+                      mosaic=0.5, # (float) image mosaic (probability)
+                      mixup=0.5, # (float) image mixup (probability)
+                      copy_paste=0.5, # (float) segment copy-paste (probability)
+                      auto_augment="randaugment", # (str) auto augmentation policy for classification (randaugment, autoaugment, augmix)
+                      erasing=0.6, # (float) probability of random erasing during classification training (0-1)
                       )
 
     trainer = DetectionTrainer(overrides=train_args)
