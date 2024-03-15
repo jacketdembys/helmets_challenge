@@ -119,7 +119,7 @@ if __name__ == '__main__':
                       hsv_v=0.8, # (float) image HSV-Value augmentation (fraction)
                       degrees=90.0, # (float) image rotation (+/- deg)
                       translate=0.5, # (float) image translation (+/- fraction)
-                      scale=5.0, # (float) image scale (+/- gain)
+                      scale=0.8, # (float) image scale (+/- gain)
                       shear=90.0, # (float) image shear (+/- deg)
                       perspective=0.0005, # (float) image perspective (+/- fraction), range 0-0.001
                       flipud=0.5, # (float) image flip up-down (probability)
