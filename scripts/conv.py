@@ -48,7 +48,8 @@ class Conv(nn.Module):
 
     def forward(self, x):
         """Apply convolution, batch normalization and activation to input tensor."""
-        return self.act(self.bn(self.dp(self.conv(x))))
+        #return self.act(self.bn(self.dp(self.conv(x))))
+        return self.act(self.dp(self.conv(x)))
 
     def forward_fuse(self, x):
         """Perform transposed convolution of 2D data."""
