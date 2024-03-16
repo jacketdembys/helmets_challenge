@@ -7,7 +7,7 @@ python_script="visualize_ground_truth_wandb.py"
 base_videoid="001"
 
 # Loop through 100 video IDs
-for ((i=71; i<=80; i++)); do
+for ((i=21; i<=30; i++)); do
     # Generate the current video ID with leading zeros
     videoid=$(printf "%03d" $i)
 

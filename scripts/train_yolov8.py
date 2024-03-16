@@ -69,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="yolov8l-change-augment-no-backbone-freeze", help="run name")
+    parser.add_argument('-name',    type=str,   default="yolov8l-change-augment+lr-backbone-freeze-optimizer-AdamW", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
@@ -104,11 +104,12 @@ if __name__ == '__main__':
                       imgsz=args.imgsz,
                       exist_ok=True,
                       val=True, 
-                      #freeze=10,
+                      freeze=10,
                       #save_json=True, 
                       #conf=0.05, 
                       #iou=0.5,
-                      #optimizer="Adam", 
+                      lr0=0.001,
+                      optimizer="AdamW", 
                       #seed=0,
                       #box=7.5, 
                       #cls=0.125, 
