@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-increase-data-aug-prob
+  name: yolo-job-jacket-change-augment-no-backbone-freeze
   labels:
     k8s-app: yolo-job-jacket
 spec:
