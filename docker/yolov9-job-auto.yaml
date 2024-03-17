@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket
+  name: yolo-job-jacket-no-backbone-freeze
   labels:
     k8s-app: yolo-job-jacket
 spec:
