@@ -16,8 +16,8 @@ if __name__ == '__main__':
   # Retrieve all labels for the dataset
   dataset_path = Path('/home/dataset')
   labels = sorted(dataset_path.rglob("*labels/*.txt"))
-  print(labels)
-  print(len(labels))
+  #print(labels)
+  #print(len(labels))
 
   # Read the content of the YAML file
   yaml_file = 'helmet_data.yaml'
@@ -117,8 +117,8 @@ if __name__ == '__main__':
       }, ds_y)
 
 
-  print(images[:5])
-  print(labels[:5])
+  print(images[0])
+  print(labels[0])
 
   """
   # Copy images and labels into respective directories (train, val) for each split
