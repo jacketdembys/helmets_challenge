@@ -67,6 +67,12 @@ if __name__ == '__main__':
     train_totals = labels_df.iloc[train_indices].sum()
     val_totals = labels_df.iloc[val_indices].sum()
 
+    #   TO avoid a division by zero, we add a small value (1E-7) to the denominator
+    ratio = val_totals/(train_totals+1E-7)
+    fold_lbl_distrb.loc[f'split_{n}'] = ratio
+
+  # 
+
     
 
 
