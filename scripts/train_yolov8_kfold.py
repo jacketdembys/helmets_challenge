@@ -79,12 +79,16 @@ if __name__ == '__main__':
   images  = []
   
   # Loop through supported extensions and gather image files 
+  #labels = sorted(dataset_path.rglob("*labels/*.txt"))
+  images = sorted(dataset_path.rglob("*images/*.jpg"))
+  """
   for ext in supported_extensions:
-    images.extend(sorted((dataset_path / 'images').rglob(f"*{ext}")))
+    images.extend(sorted((dataset_path / '*images/').rglob(f"*{ext}")))
     print(dataset_path / 'images')
     print((dataset_path / 'images').rglob(f"*{ext}"))
     print(ext)
     print(images)
+  """
 
   # Create the necessary directories and dataset YAML files (unchanged)
   save_path = Path(dataset_path / f'{datetime.date.today().isoformat()}_{ksplit}-Fold_Cross-val')
@@ -113,9 +117,10 @@ if __name__ == '__main__':
       }, ds_y)
 
 
-  #print(images)
-  #print(labels)
+  print(len(images))
+  print(len(labels))
 
+  """
   # Copy images and labels into respective directories (train, val) for each split
   for image, label in zip(images, labels):
     for split, k_split in tqdm(folds_df.loc[image.stem].items()):
@@ -130,7 +135,7 @@ if __name__ == '__main__':
   # Save records of the K-folds split and label distribution
   folds_df.to_csv(save_path / "kfold_datasplit.csv")
   fold_lbl_distrb.to_csv(save_path / "kfold_label_distribution.csv")
-  
+  """
 
 
 
