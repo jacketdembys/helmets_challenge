@@ -6,6 +6,7 @@ from collections import Counter
 import yaml
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 from ultralytics import YOLO
 from sklearn.model_selection import KFold
 
@@ -84,11 +85,44 @@ if __name__ == '__main__':
   # Create the necessary directories and dataset YAML files (unchanged)
   save_path = Path(dataset_path / f'{datetime.date.today().isoformat()}_{ksplit}-Fold_Cross-val')
   save_path.mkdir(parents=True, exist_ok=True)
-  ds_yamls = []
+  ds_yamls = []  
+ 
+  for split in folds_df.columns:
+    # Create directories
+    split_dir = save_path / split
+    split_dir.mkdir(parents=True, exist_ok=True)
+    (split_dir / 'train' / 'images').mkdir(parents=True, exist_ok=True)
+    (split_dir / 'train' / 'labels').mkdir(parents=True, exist_ok=True)
+    (split_dir / 'val' / 'images').mkdir(parents=True, exist_ok=True)
+    (split_dir / 'val' / 'labels').mkdir(parents=True, exist_ok=True)
 
-  
-  print(folds_df.columns)
-  #for split in folds_df.columns:
+    # Create dataset YAML files
+    dataset_yaml = split_dir / f'{split}_dataset.yaml'
+    ds_yamls.append(dataset_yaml)
+
+    with open(dataset_yaml, 'w') as ds_y:
+      yaml.safe_dump({
+        'path': split_dir.as_posix(),
+        'train': 'train',
+        'val':'val',
+        'names': classes
+      }, ds_y)
+
+  # Copy images and labels into respective directories (train, val) for each split
+  for image, label in zip(images, labels):
+    for split, k_split in tqdm(folds_df.loc[image.stem].items()):
+        # Destination directory
+        img_to_path = save_path / split / k_split / 'images'
+        lbl_to_path = save_path / split / k_split / 'labels'
+
+        # Copy image and label files to new directory (SamefileError if file already exists)
+        shutil.copy(image, img_to_path / image.name)
+        shutil.copy(label, lbl_to_path / label.name)
+
+  # Save records of the K-folds split and label distribution
+  folds_df.to_csv(save_path / "kfold_datasplit.csv")
+  fold_lbl_distrb.to_csv(save_path / "kfold_label_distribution.csv")
+
 
 
 
