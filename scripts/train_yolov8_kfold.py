@@ -67,11 +67,30 @@ if __name__ == '__main__':
     train_totals = labels_df.iloc[train_indices].sum()
     val_totals = labels_df.iloc[val_indices].sum()
 
-    #   TO avoid a division by zero, we add a small value (1E-7) to the denominator
+    #   To avoid a division by zero, we add a small value (1E-7) to the denominator
     ratio = val_totals/(train_totals+1E-7)
     fold_lbl_distrb.loc[f'split_{n}'] = ratio
 
-  # 
+  # Create directories and dataset YAML files for each split 
+  supported_extensions = ['.jpg'] # '.jpeg', '.png']
+
+  # Initialize an empty list to store image file paths
+  images  = []
+  
+  # Loop through supported extensions and gather image files 
+  for ext in supported_extensions:
+    images.extend(sorted((dataset_path / 'images').rglob(f"*{ext}")))
+
+  # Create the necessary directories and dataset YAML files (unchanged)
+  save_path = Path(dataset_path / f'{datetime.date.today().isoformat()}_{ksplit}-Fold_Cross-val')
+  save_path.mkdir(parents=True, exist_ok=True)
+  ds_yamls = []
+
+  
+  print(folds_df.columns)
+  #for split in folds_df.columns:
+
+
 
     
 
