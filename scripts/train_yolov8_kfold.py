@@ -80,6 +80,8 @@ if __name__ == '__main__':
   # Loop through supported extensions and gather image files 
   for ext in supported_extensions:
     images.extend(sorted((dataset_path / 'images').rglob(f"*{ext}")))
+    print(ext)
+    print(images)
 
   # Create the necessary directories and dataset YAML files (unchanged)
   save_path = Path(dataset_path / f'{datetime.date.today().isoformat()}_{ksplit}-Fold_Cross-val')
@@ -108,7 +110,7 @@ if __name__ == '__main__':
       }, ds_y)
 
 
-  print(images)
+  #print(images)
   #print(labels)
 
   # Copy images and labels into respective directories (train, val) for each split
