@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
   
   # Copy images and labels into respective directories (train, val) for each split
-  for image, label in tqdm(zip(images, labels)):
+  for image, label in zip(images, labels):
     for split, k_split in folds_df.loc[image.stem].items():
         # Destination directory
         img_to_path = save_path / split / k_split / 'images'
