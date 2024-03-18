@@ -16,7 +16,8 @@ if __name__ == '__main__':
   # Retrieve all labels for the dataset
   dataset_path = Path('/home/dataset')
   labels = sorted(dataset_path.rglob("*labels/*.txt"))
-  #print(labels)
+  print(labels)
+  print(len(labels))
 
   # Read the content of the YAML file
   yaml_file = 'helmet_data.yaml'
