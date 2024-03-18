@@ -108,8 +108,8 @@ if __name__ == '__main__':
       }, ds_y)
 
 
-  print(images[0])
-  print(labels[0])
+  print(images)
+  #print(labels)
 
   # Copy images and labels into respective directories (train, val) for each split
   for image, label in zip(images, labels):
