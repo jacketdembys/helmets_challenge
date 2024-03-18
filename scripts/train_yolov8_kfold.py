@@ -117,8 +117,8 @@ if __name__ == '__main__':
       }, ds_y)
 
 
-  print(images[0])
-  print(labels[0])
+  print(images[:5])
+  print(labels[:5])
 
   """
   # Copy images and labels into respective directories (train, val) for each split
