@@ -80,6 +80,8 @@ if __name__ == '__main__':
   # Loop through supported extensions and gather image files 
   for ext in supported_extensions:
     images.extend(sorted((dataset_path / 'images').rglob(f"*{ext}")))
+    print(dataset_path / 'images')
+    print((dataset_path / 'images').rglob(f"*{ext}"))
     print(ext)
     print(images)
 
