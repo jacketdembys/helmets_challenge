@@ -47,9 +47,6 @@ if __name__ == '__main__':
   labels_df = labels_df.fillna(0.0)
   #print(labels_df)
 
-
-
-  """
   # K-Fold dataset split (setting random_state for repeatable results)
   ksplit = 10
   kf = KFold(n_splits=ksplit, shuffle=True, random_state=352023)
@@ -110,6 +107,10 @@ if __name__ == '__main__':
         'names': classes
       }, ds_y)
 
+
+  print(images)
+  print(labels)
+
   # Copy images and labels into respective directories (train, val) for each split
   for image, label in zip(images, labels):
     for split, k_split in tqdm(folds_df.loc[image.stem].items()):
@@ -124,7 +125,7 @@ if __name__ == '__main__':
   # Save records of the K-folds split and label distribution
   folds_df.to_csv(save_path / "kfold_datasplit.csv")
   fold_lbl_distrb.to_csv(save_path / "kfold_label_distribution.csv")
-  """
+  
 
 
 
