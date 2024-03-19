@@ -32,7 +32,7 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python train_yolov8.py -epochs 300 -imgsz 1080"]
+            python train_yolov8.py -epochs 100 -imgsz 1080"]
         resources:
           limits:
             memory: "32Gi"
