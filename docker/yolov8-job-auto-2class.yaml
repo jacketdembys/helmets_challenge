@@ -33,7 +33,7 @@ spec:
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
             python create_modified_class_labels.py;
-            python train_yolov8.py -epochs 100 -imgsz 640 -config helmet_data_2class.yaml"]
+            python train_yolov8.py -epochs 100 -imgsz 640 -config helmet_data_2class.yaml -bs 32"]
         resources:
           limits:
             memory: "32Gi"
