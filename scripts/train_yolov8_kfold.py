@@ -222,7 +222,7 @@ if __name__ == '__main__':
   train_args = dict(project=args.project, 
                     name=args.name,
                     model="yolov8l.yaml", 
-                    data= ds_yaml[args.csplit], #args.config,
+                    data= ds_yamls[args.csplit], #args.config,
                     device=device, 
                     epochs=args.epochs, 
                     batch=args.bs, 
