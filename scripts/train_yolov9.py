@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument('-config', type=str, default="helmet_data.yaml",  help="config file for model training")
     parser.add_argument('-devices', type=int, default=1,  help="number of gpus")
     parser.add_argument('-epochs',   type=int, default=10,  help="number of epoch")
-    parser.add_argument('-bs',      type=int, default=16, help="number of batches")
+    parser.add_argument('-bs',      type=int, default=8, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
     parser.add_argument('-name',    type=str,   default="yolov9e-increase-augment-hr", help="run name")
