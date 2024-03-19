@@ -6,12 +6,17 @@ from collections import Counter
 import yaml
 import numpy as np
 import pandas as pd
+import time
 from tqdm import tqdm
 from ultralytics import YOLO
 from sklearn.model_selection import KFold
 
 
 if __name__ == '__main__':
+
+  print("Prepare dataset for cross validation ...")
+
+  st = time.time()
     
   # Retrieve all labels for the dataset
   dataset_path = Path('/home/dataset')
@@ -135,6 +140,13 @@ if __name__ == '__main__':
   # Save records of the K-folds split and label distribution
   folds_df.to_csv(save_path / "kfold_datasplit.csv")
   fold_lbl_distrb.to_csv(save_path / "kfold_label_distribution.csv")
+
+
+  et = time.time()
+
+  print("Done preparing the dataset!")
+
+  
   
 
 

@@ -2,8 +2,17 @@ import torch
 import pandas as pd
 import numpy as np
 import time
+import argparse
 from ultralytics import YOLO
 from wandb.integration.ultralytics import add_wandb_callback
+
+
+# Steps for submission
+"""
+1. detect_yolov9.py
+2. generate_final_submissions.py
+"""
+
 
 
 # compute elapsed time in mins and secs
@@ -15,6 +24,12 @@ def elapsed_time(start_time, end_time):
 
 
 if __name__ == "__main__":
+
+	parser = argparse.ArgumentParser(description="yolov8x helmet detection")
+	parser.add_argument('-sidx', type=int, default=1,  help="start index")
+	parser.add_argument('-eidx', type=int, default=100,  help="end index")
+	args = parser.parse_args()
+
 	start_time = time.monotonic()
 
 	# params to choose from
@@ -24,19 +39,20 @@ if __name__ == "__main__":
 	# Load a model
 	#yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
 	#model = YOLO("yolov8"+yolo_v8+".pt")  # load a pretrained model
-	model = YOLO("../../aicity2024_track5/weights/baseline_helmet_yolov8_samplewise.pt")
+	model = YOLO("../../aicity2024_track5/weights/yolov8l-change-augment-no-backbone-freeze.pt")
 
 	device = 0 if devices == 1 else [i for i in range(devices)]
-	add_wandb_callback(model)
+	#add_wandb_callback(model)
 
 	# Predict with loaded model
-	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
-	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/"
+	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/test/"
+	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/"
 	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
-	path_results="results/"	
+	path_results="results_test_images_change_augment_0.5"	
+	folder = "test_images_change_augment_05/"
 
 	# Loop through all the video folders
-	for id in range(1, 101):
+	for id in range(args.sidx, args.eidx+1):
 
 		video_id = id
 		if len(str(id)) == 1:
@@ -49,9 +65,9 @@ if __name__ == "__main__":
 		#image_name = "00000100.jpg" 
 		results = model.predict(
 			source=path_data+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
-			conf=0.25,
-			project="results",
-			name="test_images",  #image_folder,								 
+			conf=0.5,
+			project=path_results,
+			name=id,  #image_folder,								 
 			save=True,  									# save plot result
 			save_crop=True,
 			show=False,  									# show result on the screen
@@ -59,6 +75,7 @@ if __name__ == "__main__":
 			save_conf=True,  								# in result has conf score
 			save_json=True,  								# save json file result
 			device=device,
+			#batch=64,
 			#stream=True
 		)  # predict on an image
 
@@ -101,7 +118,7 @@ if __name__ == "__main__":
 		header = ["video_id", "frame", "bb_left", "bb_top","bb_width", "bb_height", "class", "confidence"]
 
 		df = pd.DataFrame(np.array(arranged_results))
-		df.to_csv("results/submission_"+str(video_id)+".txt",
+		df.to_csv(path_results+"/submission_"+str(video_id)+".txt",
 			index=False,
 			header=header)
 

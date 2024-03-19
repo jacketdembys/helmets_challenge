@@ -69,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="yolov9e-decrease-augment-no-backbone-freeze", help="run name")
+    parser.add_argument('-name',    type=str,   default="yolov9e-increase-augment", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
@@ -106,7 +106,7 @@ if __name__ == '__main__':
                       val=True, 
                       #freeze=10,
                       #save_json=True, 
-                      #conf=0.05, 
+                      conf=0.001, 
                       #iou=0.5,
                       #lr0=0.001,
                       #optimizer="AdamW", 
@@ -115,21 +115,21 @@ if __name__ == '__main__':
                       #cls=0.125, 
                       #dfl=3.0,
                       #close_mosaic=0,
-                      hsv_h=0.01, # (float) image HSV-Hue augmentation (fraction)
+                      hsv_h=0.5, # (float) image HSV-Hue augmentation (fraction)
                       hsv_s=0.8, # (float) image HSV-Saturation augmentation (fraction)
-                      hsv_v=0.37, # (float) image HSV-Value augmentation (fraction)
+                      hsv_v=0.8, # (float) image HSV-Value augmentation (fraction)
                       degrees=0.0, # (float) image rotation (+/- deg)
-                      translate=0.05, # (float) image translation (+/- fraction)
-                      scale=0.25, # (float) image scale (+/- gain)
-                      shear=0.0, # (float) image shear (+/- deg)
-                      perspective=0, # (float) image perspective (+/- fraction), range 0-0.001
-                      flipud=0, # (float) image flip up-down (probability)
-                      fliplr=0.25, # (float) image flip left-right (probability)
+                      translate=0.5, # (float) image translation (+/- fraction)
+                      scale=0.8, # (float) image scale (+/- gain)
+                      shear=90, # (float) image shear (+/- deg)
+                      perspective=0.0005, # (float) image perspective (+/- fraction), range 0-0.001
+                      flipud=0.8, # (float) image flip up-down (probability)
+                      fliplr=0.5, # (float) image flip left-right (probability)
                       mosaic=1, # (float) image mosaic (probability)
-                      mixup=0, # (float) image mixup (probability)
-                      copy_paste=0, # (float) segment copy-paste (probability)
+                      mixup=0.5, # (float) image mixup (probability)
+                      copy_paste=0.5, # (float) segment copy-paste (probability)
                       auto_augment="randaugment", # (str) auto augmentation policy for classification (randaugment, autoaugment, augmix)
-                      erasing=0, # (float) probability of random erasing during classification training (0-1)
+                      erasing=0.6, # (float) probability of random erasing during classification training (0-1)
                       )
 
     trainer = DetectionTrainer(overrides=train_args)
