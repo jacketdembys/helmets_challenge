@@ -32,8 +32,8 @@ if __name__ == "__main__":
 
     num_class = args.nc
 
-    path = "../../aicity2024_track5/dataset_"+str(num_class)+"class/"
-    #path = "/home/dataset/"
+    #path = "../../aicity2024_track5/dataset_"+str(num_class)+"class/"
+    path = "/home/dataset/"
     dataset_path = Path(path)
     labels = sorted(dataset_path.rglob("*labels/*.txt"))
 
