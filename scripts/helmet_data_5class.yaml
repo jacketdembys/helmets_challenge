@@ -10,7 +10,9 @@ val: val/images
 test: # test images (optional)
 
 # Classes
-# classid_helmet = {1: 'motorbike', 2: 'person'} 
 names:
   0: motorbike
-  1: person
+  1: DHelmet
+  2: DNoHelmet
+  3: PHelmet
+  4: PNoHelmet

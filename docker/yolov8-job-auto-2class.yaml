@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-increase-augment-v8-3class
+  name: yolo-job-jacket-increase-augment-v8-5class
   labels:
     k8s-app: yolo-job-jacket
 spec:
@@ -32,8 +32,8 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python create_modified_class_labels.py -nc 3;
-            python train_yolov8.py -epochs 100 -imgsz 640 -config helmet_data_3class.yaml -bs 32"]
+            python create_modified_class_labels.py -nc 5;
+            python train_yolov8.py -epochs 100 -imgsz 640 -config helmet_data_5class.yaml -bs 32"]
         resources:
           limits:
             memory: "32Gi"

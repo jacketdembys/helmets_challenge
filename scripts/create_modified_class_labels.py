@@ -55,6 +55,12 @@ if __name__ == "__main__":
                 df.loc[df.iloc[:, 0] == idx, 0] = 1
                 df.loc[df.iloc[:, 0] == idx+1, 0] = 2
 
+        if num_class == 5:
+            inds = [3, 5, 7]
+            for idx in inds:
+                df.loc[df.iloc[:, 0] == idx, 0] = 3
+                df.loc[df.iloc[:, 0] == idx+1, 0] = 4
+
         df.to_csv(i, 
                 index=False, 
                 header=None,
