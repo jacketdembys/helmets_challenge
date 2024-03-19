@@ -79,6 +79,7 @@ if __name__ == '__main__':
   parser.add_argument('-name',    type=str,   default="yolov8l-xval-2class", help="run name")
   parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
   parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
+  parser.add_argument('-csplit',    type=int, default=0, help="chosen k split to train on for multi-resource cross validation")
   args = parser.parse_args()
 
   print("Prepare dataset for cross validation ...")
@@ -221,7 +222,7 @@ if __name__ == '__main__':
   train_args = dict(project=args.project, 
                     name=args.name,
                     model="yolov8l.yaml", 
-                    data=args.config,
+                    data= ds_yaml[args.csplit], #args.config,
                     device=device, 
                     epochs=args.epochs, 
                     batch=args.bs, 
