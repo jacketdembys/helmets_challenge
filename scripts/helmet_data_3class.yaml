@@ -1,0 +1,17 @@
+# Train/val/test sets as 
+# 1) dir: path/to/imgs, 
+# 2) file: path/to/imgs.txt, or 
+# 3) list: [path/to/imgs1, path/to/imgs2, ..]
+
+#path: /home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5_train/aicity2024_track5_train
+path: /home/dataset
+train: train/images 
+val: val/images
+test: # test images (optional)
+
+# Classes
+# classid_helmet = {1: 'motorbike', 2: 'personHelmet', 3: 'personNoHelmet'} 
+names:
+  0: motorbike
+  1: personHelmet
+  2: personNoHelmet

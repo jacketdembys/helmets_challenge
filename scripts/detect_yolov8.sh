@@ -6,7 +6,7 @@ python_script="detect_yolov8.py"
 # Define the start and end indexes
 start_index=1
 end_index=100
-increment=10
+increment=5
 
 # Loop through start and end indexes in steps of increment
 for ((i=$start_index; i<=$end_index; i+=increment)); do
