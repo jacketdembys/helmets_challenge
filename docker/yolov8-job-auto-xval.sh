@@ -1,5 +1,5 @@
 #!/bin/bash
-num_class=5
+num_class=9
 split_start=1
 split_end=10
 split_increment=1

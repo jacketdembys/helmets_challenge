@@ -2,3 +2,4 @@ scripts/results/
 scripts/wandb/
 results*
 artifacts/
+*.pdf
