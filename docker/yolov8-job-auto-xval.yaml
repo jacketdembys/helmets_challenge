@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-increase-augment-v8-${num_class}class-xval
+  name: yolo-job-jacket-increase-augment-v8-${num_class}class-xval-${split}
   labels:
     k8s-app: yolo-job-jacket
 spec:
