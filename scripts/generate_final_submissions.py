@@ -5,7 +5,7 @@ import sys
 
 if __name__ == '__main__':
 
-    path = "results_test_images_change_augment_0.5/"
+    path = "results_yolov8l_increase_augment_hr/"
 
     combined = []
     for i in range(1,101):
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     combined["class"] = combined["class"] + 1
 
-    combined.to_csv(path+"vigir_submission_4.txt", 
+    combined.to_csv(path+"vigir_submission_5.txt", 
                     index=False, 
                     header=None)
 
