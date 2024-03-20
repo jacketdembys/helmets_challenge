@@ -34,7 +34,7 @@ spec:
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
             python create_modified_class_labels.py -nc ${num_class};            
-            python -m torch.distributed.run --nproc_per_node 2 train_yolov8_kfold.py -devices 2 -epochs 100 -imgsz 640 -config helmet_data_${num_class}class.yaml -bs 32 -name yolov8-xavl-${num_classes}-${split} -csplit ${split}"]
+            train_yolov8_kfold.py -epochs 100 -imgsz 640 -config helmet_data_${num_class}class.yaml -name yolov8-xavl-${num_classes}-${split} -csplit ${split}"]
         resources:
           limits:
             memory: "32Gi"
