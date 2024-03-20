@@ -3,3 +3,4 @@ scripts/wandb/
 results*
 artifacts/
 *.pdf
+__pycache__/
