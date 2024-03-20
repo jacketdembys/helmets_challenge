@@ -68,7 +68,7 @@ def load_model_custom(self, cfg=None, weights=None, verbose=True):
 
 # Callback function to log out the confusion matrix
 def save_confusion_matrix(validator):
-  cm = validator.confusion_matrix
+  cm = validator.confusion_matrix.matrix
   print("\n#### debug: {}\n".format(cm))
 
 
