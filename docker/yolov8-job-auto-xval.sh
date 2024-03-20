@@ -1,7 +1,7 @@
 #!/bin/bash
 num_class=2
 split_start=1
-split_end=2
+split_end=1
 split_increment=1
 
 for (( split=split_start; split<=split_end; split+=split_increment )); do
