@@ -236,8 +236,8 @@ if __name__ == '__main__':
 
   device = 0 if args.devices == 1 else [i for i in range(args.devices)]
 
-  print(type(shutil.which(ds_yamls[args.csplit-1])))
-  print(type(ds_yamls[args.csplit-1]))
+  print(args.csplit-1)
+  print(str(ds_yamls[args.csplit-1]))
 
   train_args = dict(project=args.project, 
                     name=args.name,
