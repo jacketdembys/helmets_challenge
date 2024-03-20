@@ -242,7 +242,7 @@ if __name__ == '__main__':
   train_args = dict(project=args.project, 
                     name=args.name,
                     model="yolov8l.yaml", 
-                    data= shutil.which(ds_yamls[args.csplit-1]), #args.config,
+                    data= ds_yamls[args.csplit-1].path, #args.config,
                     device=device, 
                     epochs=args.epochs, 
                     batch=args.bs, 
