@@ -78,7 +78,7 @@ def save_confusion_matrix(validator):
   )
   artifact = wandb.Artifact(type="results", name=f"run_{wandb.run.id}_results")
   artifact.add_file(local_path=save_path)
-  wandb.run.log_artifact(artifact)
+  wandb.run.log_artifact(artifact)  
   #print("\n#### debug: {}\n".format(confusion_matrix))
 
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
   parser.add_argument('-name',    type=str,   default="yolov8l-xval", help="run name")
   parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
   parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
-  parser.add_argument('-csplit',    type=int, default=0, help="chosen k split to train on for multi-resource cross validation")
+  parser.add_argument('-csplit',    type=int, default=1, help="chosen k split to train on for multi-resource cross validation")
   args = parser.parse_args()
 
   print("Prepare dataset for cross validation ...")
@@ -110,7 +110,7 @@ if __name__ == '__main__':
   #print(len(labels))
 
   # Read the content of the YAML file
-  yaml_file = 'helmet_data.yaml'
+  yaml_file = args.config #'helmet_data.yaml'
   with open(yaml_file, 'r', encoding="utf8") as y:
     classes = yaml.safe_load(y)['names']
   cls_idx = sorted(classes.keys())
@@ -239,7 +239,7 @@ if __name__ == '__main__':
   train_args = dict(project=args.project, 
                     name=args.name,
                     model="yolov8l.yaml", 
-                    data= ds_yamls[args.csplit], #args.config,
+                    data= ds_yamls[args.csplit-1], #args.config,
                     device=device, 
                     epochs=args.epochs, 
                     batch=args.bs, 

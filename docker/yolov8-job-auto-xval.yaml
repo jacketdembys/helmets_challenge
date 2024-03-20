@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: yolo-job-jacket-increase-augment-v8-${num_class}class-xval
+  labels:
+    k8s-app: yolo-job-jacket
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      labels:
+        k8s-app: yolo-job-jacket
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                    - NVIDIA-A10
+                    - NVIDIA-GeForce-RTX-3090
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/udembys/yolo
+        command: ["/bin/sh", "-c"]
+        args: ["cd /home;
+            git clone https://github.com/jacketdembys/helmets_challenge.git;
+            cd helmets_challenge/scripts/;
+            wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
+            python create_modified_class_labels.py -nc ${num_class};
+            python -m torch.distributed.run --nproc_per_node 2 train_yolov8_kflod.py -devices 2 -epochs 100 -imgsz 640 -config helmet_data_${num_classes}class.yaml -bs 32 -csplit ${split}"]
+        resources:
+          limits:
+            memory: "32Gi"
+            cpu: "10"
+            nvidia.com/gpu: "2"
+          requests:
+            memory: "32Gi"
+            cpu: "10"
+            nvidia.com/gpu: "2"
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+      restartPolicy: Never
