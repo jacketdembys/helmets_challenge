@@ -66,6 +66,13 @@ def load_model_custom(self, cfg=None, weights=None, verbose=True):
   return model
 
 
+# Callback function to log out the confusion matrix
+def save_confusion_matrix(validator):
+  cm = validator.confusion_matrix
+  print("\n#### debug: {}\n".format(cm))
+
+
+
 
 if __name__ == '__main__':
 
@@ -259,23 +266,8 @@ if __name__ == '__main__':
                     )
   
   trainer = DetectionTrainer(overrides=train_args)
-  #trainer.add_callback("on_val_end", save_confusion_matrix)
-  #trainer.add_callback("on_val_end", save_eval_json_with_id)
+  trainer.add_callback("on_val_end", save_confusion_matrix)
   trainer.train()
-
-  metrics = trainer.val() 
-  print(metrics.confusion_matrix)
-
-
-
-
-
-
-
-  
-
-
-
     
 
 
