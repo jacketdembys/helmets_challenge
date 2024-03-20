@@ -68,8 +68,18 @@ def load_model_custom(self, cfg=None, weights=None, verbose=True):
 
 # Callback function to log out the confusion matrix
 def save_confusion_matrix(validator):
-  cm = validator.confusion_matrix.matrix
-  print("\n#### debug: {}\n".format(cm))
+  confusion_matrix = validator.confusion_matrix.matrix
+  confusion_matrix = pd.DataFrame(confusion_matrix)
+  save_path = "confusion_matrix.csv"
+  confusion_matrix.to_csv(
+    save_path, 
+    index=False, 
+    header=None
+  )
+  artifact = wandb.Artifact(type="results", name=f"run_{wandb.run.id}_results")
+  artifact.add_file(local_path=save_path)
+  wandb.run.log_artifact(artifact)
+  #print("\n#### debug: {}\n".format(confusion_matrix))
 
 
 
