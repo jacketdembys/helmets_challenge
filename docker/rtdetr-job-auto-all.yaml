@@ -29,13 +29,10 @@ spec:
         image: gitlab-registry.nrp-nautilus.io/udembys/yolo
         command: ["/bin/sh", "-c"]
         args: ["cd /home;
-            mv dataset/val/images/* dataset/train/images/; 
-            mv dataset/val/labels/* dataset/train/labels/;
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            #python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920 -bs 32
-            python train_rtdetr.py -devices 2 -epochs 100 -imgsz 1080"]
+            python train_rtdetr.py -epochs 100 -imgsz 1080"]
         resources:
           limits:
             memory: "32Gi"
