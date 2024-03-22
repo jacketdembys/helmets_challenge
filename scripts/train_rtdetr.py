@@ -74,6 +74,6 @@ if __name__ == '__main__':
                       erasing=0.6, # (float) probability of random erasing during classification training (0-1)
                       )
 
-    trainer = RTDETRDetectionModel(overrides=train_args)
+    trainer = RTDETRTrainer(overrides=train_args)
     #trainer.add_callback("on_val_end", save_eval_json_with_id)
     trainer.train()
