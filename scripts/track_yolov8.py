@@ -17,8 +17,8 @@ def yolo_track(model, video_path):
 
 if __name__ == "__main__":
     model = YOLO("../../aicity2024_track5/weights/yolov8l-increase-augment-hr.pt")
-    
-
+    video_path = ""
+    results = yolo_track(model, video_path)
 
 
 

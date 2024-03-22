@@ -69,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="yolov8l-increase-augment-2class", help="run name")
+    parser.add_argument('-name',    type=str,   default="yolov8l-increase-augment-all", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
