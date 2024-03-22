@@ -39,7 +39,7 @@ if __name__ == "__main__":
 	# Load a model
 	#yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
 	#model = YOLO("yolov8"+yolo_v8+".pt")  # load a pretrained model
-	model = YOLO("../../aicity2024_track5/weights/yolov8l-increase-augment.pt")
+	model = YOLO("../../aicity2024_track5/weights/yolov8l-increase-augment-hr.pt")
 
 	device = 0 if devices == 1 else [i for i in range(devices)]
 	#add_wandb_callback(model)
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/test/"
 	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/"
 	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
-	path_results="results_yolov8l_increase_augment"	
+	path_results="results_yolov8l_increase_augment_hr_iou_0.5"	
 	#folder = "test_images_change_augment_05/"
 
 	# Loop through all the video folders
@@ -75,6 +75,8 @@ if __name__ == "__main__":
 			save_conf=True,  								# in result has conf score
 			save_json=True,  								# save json file result
 			device=device,
+			iou=0.5,
+			augment=True
 			#batch=64,
 			#stream=True
 		)  # predict on an image

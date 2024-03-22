@@ -16,18 +16,20 @@ def plot_confusion_matrix(run_ids, categories, figsize=(12,8), block_fig=True):
         artifact = run.use_artifact('jacketdembys/helmets-challenge/run_{}_results:v1'.format(i), type='results')
         artifact_dir = artifact.download()
         cm = pd.read_csv(os.path.join(artifact_dir, "confusion_matrix.csv"), header=None)
+        #print(cm)
         df = (df + cm)
+
 
     df = df / 10
     dfa = np.array(df) 
     #df.columns = ["motorbike (T)", "person (T)", "background (T)"]
     #df.index = ["motorbike (p)", "person", "background"]
     print(df)
-    print(dfa)
+    #print(dfa)
 
     #labels = ['True Neg','False Pos','False Neg','True Pos']
     #categories = ['motorbike', 'person', 'background']
-    make_confusion_matrix(dfa, 
+    make_confusion_matrix(dfa.transpose(), 
                         #group_names=labels,
                         categories=categories,
                         figsize=figsize 
@@ -55,12 +57,11 @@ if __name__ == "__main__":
                     "41loqzhl", # split 10
                     ]
 
-    categories = ['motorbike', 'person', 'background']
+    categories = ['motorbike', 'person','background']
     plot_confusion_matrix(run_id_2class, categories, figsize=(12,8))
 
 
-
-    # list of run_id for different splits for the 2 class cross-validation
+    # list of run_id for different splits for the 3 class cross-validation
     run_id_3class = ["3rr822cf", # split 1
                     "fg245qnf", # split 2
                     "26nz6ou8", # split 3
@@ -73,6 +74,39 @@ if __name__ == "__main__":
                     "naq7pgfp", # split 10
                     ]
 
-    categories = ['motorbike', 'personHelmet','personNoHelmet', 'background']
+    categories = ['motorbike', 'personHelmet','personNoHelmet','background']
     plot_confusion_matrix(run_id_3class, categories, figsize=(12,8))
 
+
+    # list of run_id for different splits for the 5 class cross-validation
+    run_id_5class = ["gtjt9jix", # split 1
+                    "cm91gg96", # split 2
+                    "pttkztnm", # split 3
+                    "tqu9qwuz", # split 4
+                    "98icogus", # split 5
+                    "tnlgu64l", # split 6
+                    "030qw0wp", # split 7
+                    "9i35rz8o", # split 8
+                    "ac5ij8wt", # split 9
+                    "2kwq1pp2", # split 10
+                    ]
+
+    categories = ['motorbike', 'DHelmet','DNoHelmet','PHelmet','PNoHelmet','background']
+    plot_confusion_matrix(run_id_5class, categories, figsize=(12,8))
+
+
+    # list of run_id for different splits for the 9 class cross-validation
+    run_id_9class = ["97ot0af2", # split 1
+                    "edflkze4", # split 2
+                    "rh8df2go", # split 3
+                    "2ivge79j", # split 4
+                    "yr7pm1qn", # split 5
+                    "1m0yzokz", # split 6
+                    "b756fg4d", # split 7
+                    "omreg3e9", # split 8
+                    "hd24z7hu", # split 9
+                    "tr3uqqok", # split 10
+                    ]
+
+    categories = ['motorbike', 'DHelmet','DNoHelmet','P1Helmet','P1NoHelmet','P2Helmet','P2NoHelmet','P0Helmet','P0NoHelmet','background']
+    plot_confusion_matrix(run_id_9class, categories, figsize=(12,8))
