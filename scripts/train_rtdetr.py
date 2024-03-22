@@ -17,14 +17,15 @@ def load_model(self, cfg=None, weights=None, verbose=True):
 
 if __name__ == '__main__':
     # Another helmet dataset: https://osf.io/4pwj8/
-    parser = argparse.ArgumentParser(description="yolov8x helmet experiment")
+    parser = argparse.ArgumentParser(description="rtdetr helmet experiment")
     parser.add_argument('-config', type=str, default="helmet_data.yaml",  help="config file for model training")
     parser.add_argument('-devices', type=int, default=1,  help="number of gpus")
+    parser.add_argument('-model', type=str, default="rtdetr-x.yaml", help="model file name")
     parser.add_argument('-epochs',   type=int, default=10,  help="number of epoch")
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="yolov8l-increase-augment-all", help="run name")
+    parser.add_argument('-name',    type=str,   default="rtdetr-x-increase-augment-all", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
@@ -32,25 +33,11 @@ if __name__ == '__main__':
     
     RTDETRTrainer.get_model = load_model
 
-
-    # Initialize weights and bias
-    # wandb.init(
-    #    entity="jacketdembys",
-    #    project = "ai-city-challenge",                
-    #    group = 'Test-0-Playing-With-The-API',
-    #    name = "Test-Inference",
-    #    job_type = "baseline"
-    # )
-
-    # Load a model and export to onnx format: the model is visualize in the Netron app: https://netron.app
-    #yolo_v8 = "x"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
-    #model = YOLO("yolov8"+yolo_v8+".pt")  # load a model
-
     device = 0 if args.devices == 1 else [i for i in range(args.devices)]
 
     train_args = dict(project=args.project, 
                       name=args.name,
-                      model="yolov8l.yaml", 
+                      model=args.model, 
                       data=args.config,
                       device=device, 
                       epochs=args.epochs, 
@@ -62,7 +49,7 @@ if __name__ == '__main__':
                       #freeze=10,
                       #save_json=True, 
                       conf=0.001, 
-                      #iou=0.5,
+                      iou=0.5,
                       #lr0=0.001,
                       #optimizer="AdamW", 
                       #seed=0,
@@ -87,6 +74,6 @@ if __name__ == '__main__':
                       erasing=0.6, # (float) probability of random erasing during classification training (0-1)
                       )
 
-    trainer = DetectionTrainer(overrides=train_args)
+    trainer = RTDETRDetectionModel(overrides=train_args)
     #trainer.add_callback("on_val_end", save_eval_json_with_id)
     trainer.train()
