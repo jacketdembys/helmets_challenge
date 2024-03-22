@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-increase-augment-v8-shr
+  name: yolo-job-jacket-increase-augment-v8-shr-mgpus
   labels:
     k8s-app: yolo-job-jacket
 spec:
@@ -34,7 +34,7 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python train_yolov8.py -epochs 100 -imgsz 1920 -bs 16"]
+            python -m torch.distributed.run --nproc_per_node 2 train_yolov8.py -devices 2 -epochs 100 -imgsz 1920 -bs 32"]
         resources:
           limits:
             memory: "32Gi"
