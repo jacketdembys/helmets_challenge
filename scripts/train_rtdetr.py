@@ -8,7 +8,7 @@ from ultralytics.utils import RANK
 # Build a custom YOLO model
 def load_model(self, cfg=None, weights=None, verbose=True):
   model = RTDETRDetectionModel(cfg, nc=self.data["nc"], verbose=verbose and RANK == -1)
-  weights, _ = attempt_load_one_weight("checkpoints/rtdetr-x.pt")
+  weights, _ = attempt_load_one_weight("checkpoints/rtdetr-l.pt")
   model.load(weights)
   return model
 
@@ -20,12 +20,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="rtdetr helmet experiment")
     parser.add_argument('-config', type=str, default="helmet_data.yaml",  help="config file for model training")
     parser.add_argument('-devices', type=int, default=1,  help="number of gpus")
-    parser.add_argument('-model', type=str, default="rtdetr-x.yaml", help="model file name")
+    parser.add_argument('-model', type=str, default="rtdetr-l.yaml", help="model file name")
     parser.add_argument('-epochs',   type=int, default=10,  help="number of epoch")
     parser.add_argument('-bs',      type=int, default=16, help="number of batches")
     parser.add_argument('-imgsz',   type=int, default=640, help="resize image before feeding to model")
     parser.add_argument('-rpath',   type=str, default="/home/results/", help="path to results")
-    parser.add_argument('-name',    type=str,   default="rtdetr-x-increase-augment-all", help="run name")
+    parser.add_argument('-name',    type=str,   default="rtdetr-l-increase-augment-all", help="run name")
     parser.add_argument('-project', type=str,   default="helmets-challenge", help="project name")
     parser.add_argument('-frac',    type=float, default=1.0, help="fraction of the data being used")
     args = parser.parse_args()
