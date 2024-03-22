@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rtdetr-job-jacket-increase-augment-shr-mgpus
+  name: rtdetr-job-jacket-increase-augment-shr-mgpus-2
   labels:
     k8s-app: rtdetr-job-jacket
 spec:
@@ -37,13 +37,13 @@ spec:
             python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920 -bs 24"]
         resources:
           limits:
-            memory: "32Gi"
+            memory: "64Gi"
             cpu: "10"
-            nvidia.com/gpu: "1"
+            nvidia.com/gpu: "2"
           requests:
-            memory: "32Gi"
+            memory: "64Gi"
             cpu: "10"
-            nvidia.com/gpu: "1"
+            nvidia.com/gpu: "2"
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm
