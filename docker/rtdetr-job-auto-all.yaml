@@ -34,16 +34,17 @@ spec:
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920 -bs 32"]
+            #python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920 -bs 32
+            python train_rtdetr.py -devices 2 -epochs 100 -imgsz 1080"]
         resources:
           limits:
-            memory: "64Gi"
+            memory: "32Gi"
             cpu: "10"
-            nvidia.com/gpu: "2"
+            nvidia.com/gpu: "1"
           requests:
-            memory: "64Gi"
+            memory: "32Gi"
             cpu: "10"
-            nvidia.com/gpu: "2"
+            nvidia.com/gpu: "1"
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm
