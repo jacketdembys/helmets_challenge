@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rtdetr-job-jacket-increase-augment-shr-mgpus-2
+  name: rtdetr-l-job-jacket-increase-augment-shr
   labels:
     k8s-app: rtdetr-job-jacket
 spec:
@@ -29,12 +29,12 @@ spec:
         image: gitlab-registry.nrp-nautilus.io/udembys/yolo
         command: ["/bin/sh", "-c"]
         args: ["cd /home;
-            mv dataset/val/images/* dataset/train/images/; 
-            mv dataset/val/labels/* dataset/train/labels/;
+            mv dataset/val/images/* dataset/train/images/;
+            mv dataset/val/labels/* dataset/train/labels/
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;
-            python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920 -bs 24"]
+            python -m torch.distributed.run --nproc_per_node 2 train_rtdetr.py -devices 2 -epochs 100 -imgsz 1920"]
         resources:
           limits:
             memory: "64Gi"
