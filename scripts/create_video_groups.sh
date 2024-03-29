@@ -2,7 +2,7 @@
 
 
 # Define the folder number
-folder_number=1
+folder_number=2
 
 # Move everything from val to train folder to create the appropriate val folder
 mv /home/dataset/val/images/* /home/dataset/train/images/;
