@@ -31,9 +31,9 @@ spec:
         image: gitlab-registry.nrp-nautilus.io/udembys/yolo
         command: ["/bin/sh", "-c"]
         args: ["cd /home;
-            bash create_video_groups.sh;
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
+            bash create_video_groups.sh;
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;           
             python train_yolov8.py -epochs 100 -imgsz 640 -bs 32 -config helmet_data.yaml -name yolov8-video-xavl-9class-split1"]
         resources:
