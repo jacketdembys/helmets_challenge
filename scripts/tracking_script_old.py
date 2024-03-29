@@ -55,15 +55,16 @@ def yolo_track(model, video_path):
 
 def build_iou_array(results, num_frames = 200):
 
-    num_frames = len(results)
     max_tracks = trackers.basetrack.BaseTrack.next_id() - 1 # This should be set to the maximum number of track IDs
     # max_tracks = 31
+    num_frames = len(results)
 
     # # Initialize the 3D array
     iou_conditions_met = np.zeros((num_frames, max_tracks+1, max_tracks+1), dtype=int)
     track_ids_per_frame = {}
     # # Example track IDs per frame (replace with your actual method of obtaining them)
     for frame in range(num_frames):
+    #for frame in range(len(results)):
         if results[frame].boxes.id is not None:
             track_ids_per_frame.update({frame: results[frame].boxes.id.int().cpu().tolist()})
         else:
@@ -71,6 +72,7 @@ def build_iou_array(results, num_frames = 200):
             
     # # Populate the array
     for frame in range(num_frames):
+    #for frame in range(len(results)):
         frame_classes = results[frame].boxes.cls.cpu().tolist()
         frame_boxes = results[frame].boxes.xywh.cpu().tolist()
         track_ids = track_ids_per_frame[frame]
@@ -110,6 +112,7 @@ def class_id_frame_map(results, num_frames):
 
     class_id_assocciation = []
     num_frames = len(results)
+    
     for frame in range(num_frames):
         if results[frame].boxes.id is not None:
             ids = results[frame].boxes.id.int().cpu().tolist()
@@ -288,122 +291,71 @@ def interpolation_known_points_extractor(results, track_id, frame_numbers):
         boxes.append(id_box)
     return classes, boxes
 
-# def find_closest_frames_for_missing_id(all_groups, 
-#                                         max_frequency_groups,
-#                                         frame_ids_with_valid_group_for_missing):
-#     valid_groups = max_frequency_groups
-#     # Assuming 'frame_dict' is your initial dictionary with frame IDs as keys and lists of groups as values,
-#     # and 'valid_groups' is defined as shown previously.
-
-#     # Convert 'frame_dict' to have frozensets for easier comparison
-#     frame_dict_frozensets = {frame_id: [frozenset(group) for group in groups] for frame_id, groups in all_groups.items()}
-
-#     valid_group_to_frames = {str(group): [] for group in valid_groups.values()}
-#     for frame_id, groups in all_groups.items():
-#         for group in groups:
-#             group_str = str(group)
-#             if group_str in valid_group_to_frames:
-#                 valid_group_to_frames[group_str].append(frame_id)
-
-#     # Convert lists to sorted sets for efficient lookup
-#     for group_str in valid_group_to_frames.keys():
-#         valid_group_to_frames[group_str] = sorted(set(valid_group_to_frames[group_str]))
-
-#     # Now, for each missing element, find the two closest frames with the valid group.
-#     closest_frames_for_missing = {}
-#     for missing_str, frame_infos in frame_ids_with_valid_group_for_missing.items():
-#         for info in frame_infos:
-#             frame_id = info['frame_id']
-#             valid_group_str = str(info['valid_group'])
-
-#             # Get all frames where the valid group appears
-#             valid_frames = valid_group_to_frames[valid_group_str]
-
-#             # Find the two closest frames (before or after) the current frame where the missing element is detected
-#             diffs = [(abs(frame_id - vf), vf) for vf in valid_frames]
-#             closest_two = sorted(diffs, key=lambda x: x[0])[:2]
-#             closest_frame_ids = [frame_id for _, frame_id in closest_two]
-
-#             # Store the results
-#             if missing_str not in closest_frames_for_missing:
-#                 closest_frames_for_missing[missing_str] = []
-#             closest_frames_for_missing[missing_str].append({
-#                 "missing_frame": frame_id,
-#                 "closest_frames": closest_frame_ids
-#             })
-
-#     closest_frames_for_missing_with_completing_elements = {}
-
-#     for missing_str, frame_infos in frame_ids_with_valid_group_for_missing.items():
-#         missing_elements = eval(missing_str)  # Convert string back to a set
-#         for info in frame_infos:
-#             frame_id = info['frame_id']
-#             valid_group = eval(info['valid_group'])
-#             valid_group_str = str(valid_group)
-
-#             # Get all frames where the valid group appears
-#             valid_frames = valid_group_to_frames[valid_group_str]
-
-#             # Find the two closest frames (before or after) the current frame where the missing element is detected
-#             diffs = [(abs(frame_id - vf), vf) for vf in valid_frames]
-#             closest_two = sorted(diffs, key=lambda x: x[0])[:2]
-#             closest_frame_ids = [frame_id for _, frame_id in closest_two]
-
-#             # Find the elements that complete the missing element for valid groups
-#             completing_elements = valid_group - missing_elements
-
-#             # Store the results, including the completing elements
-#             if missing_str not in closest_frames_for_missing_with_completing_elements:
-#                 closest_frames_for_missing_with_completing_elements[missing_str] = []
-#             closest_frames_for_missing_with_completing_elements[missing_str].append({
-#                 "missing_frame": frame_id,
-#                 "closest_frames": closest_frame_ids,
-#                 "completing_elements": completing_elements
-#             })
-
-    
-
-#     return closest_frames_for_missing_with_completing_elements
-
-
-def find_closest_frames_for_missing_id(all_groups, max_frequency_groups, frame_ids_with_valid_group_for_missing):
-    # Helper function to convert a group to a sorted tuple key
-    def to_sorted_tuple_key(group):
-        return tuple(sorted(group))
+def find_closest_frames_for_missing_id(all_groups, 
+                                        max_frequency_groups,
+                                        frame_ids_with_valid_group_for_missing):
     valid_groups = max_frequency_groups
-    # Convert all_groups to use sorted tuple keys
-    frame_dict_tuples = {frame_id: [to_sorted_tuple_key(group) for group in groups] for frame_id, groups in all_groups.items()}
-    
-    # Initialize valid_group_to_frames using sorted tuple keys
-    valid_group_to_frames = {}
-    for frame_id, groups in frame_dict_tuples.items():
-        for group in groups:
-            if group in valid_group_to_frames:
-                valid_group_to_frames[group].add(frame_id)  # Use a set to avoid duplicate frame IDs
-            else:
-                valid_group_to_frames[group] = {frame_id}
+    # Assuming 'frame_dict' is your initial dictionary with frame IDs as keys and lists of groups as values,
+    # and 'valid_groups' is defined as shown previously.
 
-    # Now, process frame_ids_with_valid_group_for_missing, assuming it's been adjusted to use tuple keys as well.
-    # Here we directly use the tuples, so make sure they're sorted and consistent.
-    
-    closest_frames_for_missing_with_completing_elements = {}
+    # Convert 'frame_dict' to have frozensets for easier comparison
+    frame_dict_frozensets = {frame_id: [frozenset(group) for group in groups] for frame_id, groups in all_groups.items()}
+
+    valid_group_to_frames = {str(group): [] for group in valid_groups.values()}
+    for frame_id, groups in all_groups.items():
+        for group in groups:
+            group_str = str(group)
+            if group_str in valid_group_to_frames:
+                valid_group_to_frames[group_str].append(frame_id)
+
+    # Convert lists to sorted sets for efficient lookup
+    for group_str in valid_group_to_frames.keys():
+        valid_group_to_frames[group_str] = sorted(set(valid_group_to_frames[group_str]))
+
+    # Now, for each missing element, find the two closest frames with the valid group.
+    closest_frames_for_missing = {}
     for missing_str, frame_infos in frame_ids_with_valid_group_for_missing.items():
-        missing_elements = eval(missing_str)  # Ensure this converts to a tuple if coming from a string
         for info in frame_infos:
             frame_id = info['frame_id']
-            valid_group = to_sorted_tuple_key(eval(info['valid_group']))  # Convert to sorted tuple
+            valid_group_str = str(info['valid_group'])
 
             # Get all frames where the valid group appears
-            valid_frames = sorted(valid_group_to_frames.get(valid_group, []))
+            valid_frames = valid_group_to_frames[valid_group_str]
 
-            # Compute distances to find the closest frames
-            diffs = [(abs(frame_id - vf), vf) for vf in valid_frames if vf != frame_id]
+            # Find the two closest frames (before or after) the current frame where the missing element is detected
+            diffs = [(abs(frame_id - vf), vf) for vf in valid_frames]
             closest_two = sorted(diffs, key=lambda x: x[0])[:2]
-            closest_frame_ids = [vf for _, vf in closest_two]
+            closest_frame_ids = [frame_id for _, frame_id in closest_two]
+
+            # Store the results
+            if missing_str not in closest_frames_for_missing:
+                closest_frames_for_missing[missing_str] = []
+            closest_frames_for_missing[missing_str].append({
+                "missing_frame": frame_id,
+                "closest_frames": closest_frame_ids
+            })
+
+    closest_frames_for_missing_with_completing_elements = {}
+
+    for missing_str, frame_infos in frame_ids_with_valid_group_for_missing.items():
+        missing_elements = eval(missing_str)  # Convert string back to a set
+        for info in frame_infos:
+            frame_id = info['frame_id']
+            valid_group = eval(info['valid_group'])
+            valid_group_str = str(valid_group)
+
+            # Get all frames where the valid group appears
+            valid_frames = valid_group_to_frames[valid_group_str]
+
+            # Find the two closest frames (before or after) the current frame where the missing element is detected
+            diffs = [(abs(frame_id - vf), vf) for vf in valid_frames]
+            closest_two = sorted(diffs, key=lambda x: x[0])[:2]
+            closest_frame_ids = [frame_id for _, frame_id in closest_two]
 
             # Find the elements that complete the missing element for valid groups
-            completing_elements = set(valid_group) - set(eval(missing_str))
+            completing_elements = valid_group - missing_elements
 
+            # Store the results, including the completing elements
             if missing_str not in closest_frames_for_missing_with_completing_elements:
                 closest_frames_for_missing_with_completing_elements[missing_str] = []
             closest_frames_for_missing_with_completing_elements[missing_str].append({
@@ -412,7 +364,10 @@ def find_closest_frames_for_missing_id(all_groups, max_frequency_groups, frame_i
                 "completing_elements": completing_elements
             })
 
+    
+
     return closest_frames_for_missing_with_completing_elements
+
 
 def correct_class_id(class_id_frame, threshold=0.9):
 
@@ -467,10 +422,10 @@ def triangular_interpolation(red_boxes, blue_boxes):
     x_red_3 = red_box_3[0]
     y_red_3 = red_box_3[1]
     
-    alpha1 = np.arctan2((y_red_2 - y_red_1),(x_red_2 - x_red_1 + 0.00001))
+    alpha1 = np.arctan((y_red_2 - y_red_1)/(x_red_2 - x_red_1 + 0.00001))
     r1_mag = np.sqrt((y_red_2 - y_red_1)**2 + (x_red_2 - x_red_1)**2)
     
-    alpha2 = np.arctan2((y_red_3 - y_red_2),(x_red_3 - x_red_2 + 0.00001))
+    alpha2 = np.arctan((y_red_3 - y_red_2)/(x_red_3 - x_red_2 + 0.00001))
     r2_mag = np.sqrt((y_red_3 - y_red_2)**2 + (x_red_3 - x_red_2)**2)
     
     alpha_g = alpha2 - alpha1
@@ -482,14 +437,14 @@ def triangular_interpolation(red_boxes, blue_boxes):
     x_blue_2 = blue_box_2[0]
     y_blue_2 = blue_box_2[1]
     
-    beta_1 = np.arctan2((y_blue_2 - y_blue_1),(x_blue_2 - x_blue_1 + 0.00001))
+    beta_1 = np.arctan((y_blue_2 - y_blue_1)/(x_blue_2 - x_blue_1 + 0.00001))
     b1_mag = np.sqrt((y_blue_2 - y_blue_1)**2 + (x_blue_2 - x_blue_1)**2)
     
     beta2 = beta_1 + alpha_g
     b2_mag = (r2_mag * b1_mag)/r1_mag
     
-    x_blue_3 = x_blue_2 + b2_mag * np.cos(beta2)
-    y_blue_3 = y_blue_2 + b2_mag * np.sin(beta2)
+    x_blue_3 = x_blue_2 - b2_mag * np.cos(beta2)
+    y_blue_3 = y_blue_2 - b2_mag * np.sin(beta2)
 
     w_red_2 = red_box_2[2]
     h_red_2 = red_box_2[3]

@@ -25,13 +25,14 @@ if __name__ == "__main__":
 	# Load a model
 	#yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
 	#model = YOLO("yolov8"+yolo_v8+".pt")  # load a pretrained model
-	model = YOLO("../../aicity2024_track5/weights/baseline_helmet_yolov8_samplewise.pt")
-
+	#model = YOLO("../../aicity2024_track5/weights/baseline_helmet_yolov8_samplewise.pt")
+	model = YOLO("../../aicity2024_track5/weights/yolov8l-increase-augment-all.pt")
+      
 	device = 0 if devices == 1 else [i for i in range(devices)]
-	add_wandb_callback(model)
+	#add_wandb_callback(model)
 
 	# Predict with loaded model
-	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/videos/"
+	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/videos/"
 	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
 	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/images/"
 	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
@@ -51,19 +52,22 @@ if __name__ == "__main__":
 	"""
 			
 	#image_name = "00000100.jpg" 
-	video_name = "001.mp4"
-	results = model.predict(
+	video_name = "009.mp4"
+	results = model.track(
 		source=path_data+video_name, #+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
-		conf=0.25,
-		project="results",
-		name="test_videos_0.25",  #image_folder,								 
+		conf=0.1,
+		project="results_rs",
+		name="T009",  #image_folder,								 
 		save=True,  									# save plot result
-		save_crop=True,
+		#save_crop=True,
+		save_frames=True,
 		show=False,  									# show result on the screen
 		save_txt=True,  								# save result in txt
 		save_conf=True,  								# in result has conf score
-		save_json=True,  								# save json file result
+		#save_json=True,  								# save json file result
 		device=device,
+        iou=0.1,
+        tracker="botsort.yaml"
 		#stream=True
 	)  # predict on an image
       
