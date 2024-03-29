@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: yolo-job-jacket-increase-augment-v8-9class-xval-2
+  name: yolo-job-jacket-increase-augment-v8-9class-xval-${split}
   labels:
     k8s-app: yolo-job-jacket
 spec:
@@ -33,9 +33,9 @@ spec:
         args: ["cd /home;
             git clone https://github.com/jacketdembys/helmets_challenge.git;
             cd helmets_challenge/scripts/;
-            bash create_video_groups.sh;
+            bash create_video_groups.sh ${split};
             wandb login --cloud d7f81da19c5965b1c5eff37a677caab3ffb5379c;           
-            python train_yolov8.py -epochs 100 -imgsz 640 -bs 32 -config helmet_data.yaml -name yolov8-video-xavl-9class-split2"]
+            python train_yolov8.py -epochs 100 -imgsz 640 -bs 32 -config helmet_data.yaml -name yolov8-video-xavl-9class-split${split}"]
         resources:
           limits:
             memory: "32Gi"

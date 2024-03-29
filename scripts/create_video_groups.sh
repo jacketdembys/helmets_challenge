@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# Check if the folder number is provided as a command line argument
+if [ $# -eq 0 ]; then
+    echo "Error: Please provide the folder number as an argument."
+    exit 1
+fi
 
-# Define the folder number
-folder_number=2
+# Assign the first command line argument to the folder number
+folder_number=$1
 
 # Move everything from val to train folder to create the appropriate val folder
 mv /home/dataset/val/images/* /home/dataset/train/images/;
