@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Move everything from val to train folder to create the appropriate val folder
-mv dataset/val/images/* dataset/train/images/;
-mv dataset/val/labels/* dataset/train/labels/;
 
 # Define the folder number
 folder_number=1
+
+# Move everything from val to train folder to create the appropriate val folder
+mv dataset/val/images/* dataset/train/images/;
+mv dataset/val/labels/* dataset/train/labels/;
 
 # Perform if statements based on the folder number
 if [ $folder_number -eq 1 ]; then
