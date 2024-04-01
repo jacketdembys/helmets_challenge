@@ -187,6 +187,79 @@ def valid_group_identification(all_groups):
     return max_frequency_groups, intersections_with_frequencies
 
 
+def modified_valid_group_identification(all_groups, appearance_threshold=0.2):
+    all_group_list = []
+    
+    for frame in all_groups:
+        # print(frame_group)
+        for s in all_groups[frame]:
+            # print(s)
+            all_group_list.append(frozenset(s))
+    
+    frequencies = Counter(all_group_list)
+    union_of_all_sets = set().union(*all_group_list)
+    
+    intersections_with_frequencies = {element: {} for element in union_of_all_sets}
+    
+    for element in union_of_all_sets:
+        for group in all_group_list:
+            intersection = group.intersection({element})
+            if intersection:
+                # If there is an intersection, get the frequency of this group
+                group_as_set = set(group)  # Convert frozenset back to set for reporting
+                frequency = frequencies[group]
+                intersections_with_frequencies[element][str(group_as_set)] = frequency
+    
+    max_frequency_groups = {}
+
+    for element, groups in intersections_with_frequencies.items():
+        # Initialize variables to keep track of the max group and its frequency
+        max_group = None
+        max_frequency = -1
+        max_group_size = 0  # Keep track of the size of the max group
+
+        # Also track the most frequent group that has more than one member
+        most_frequent_multi_member_group = None
+        most_frequent_multi_member_group_frequency = -1
+
+        total_appearance = 0
+        
+        for group_str, frequency in groups.items():
+
+            total_appearance = total_appearance + frequency
+
+        for group_str, frequency in groups.items():
+            group_set = eval(group_str)  # Convert the string representation back to a set
+            group_size = len(group_set)
+
+            # Check if this group has the highest frequency seen so far
+            if frequency > max_frequency:
+                max_frequency = frequency
+                max_group = group_str
+                max_group_size = group_size
+
+            # Independently check if this is the most frequent multi-member group
+            if group_size == 2 and frequency > most_frequent_multi_member_group_frequency:
+                most_frequent_multi_member_group_frequency = frequency
+                most_frequent_multi_member_group = group_str
+
+            if group_size > 2 and frequency/total_appearance > appearance_threshold:
+                    most_frequent_multi_member_group_frequency = frequency
+                    most_frequent_multi_member_group = group_str
+
+        # Determine which group to return for this element
+        if max_group_size > 1:
+            max_frequency_groups[element] = max_group
+        else:
+            if most_frequent_multi_member_group is not None:
+                max_frequency_groups[element] = most_frequent_multi_member_group
+            else:
+                max_frequency_groups[element] = max_group
+    
+    
+
+    return max_frequency_groups, intersections_with_frequencies
+    
 
 def find_missing_pair_member(max_frequency_groups, intersections_with_frequencies):
 

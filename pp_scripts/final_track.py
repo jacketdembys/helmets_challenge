@@ -53,7 +53,7 @@ all_groups = identify_group(iou_conditions_met)
 
 class_id_frame_map_array = class_id_frame_map(results, num_frames=200)
 
-max_frequency_groups, intersections_with_frequencies = valid_group_identification(all_groups)
+max_frequency_groups, intersections_with_frequencies = modified_valid_group_identification(all_groups, appearance_threshold=0.2)
 
 missing_members = find_missing_pair_member(max_frequency_groups, intersections_with_frequencies)
 
