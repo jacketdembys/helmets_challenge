@@ -55,7 +55,7 @@ class_id_frame_map_array = class_id_frame_map(results, num_frames=200)
 
 max_frequency_groups, intersections_with_frequencies = modified_valid_group_identification(all_groups, appearance_threshold=0.2)
 
-missing_members = find_missing_pair_member(max_frequency_groups, intersections_with_frequencies)
+missing_members = modified_find_missing_pair_member(max_frequency_groups, intersections_with_frequencies)
 
 frame_ids_with_valid_group_for_missing = find_frame_and_valid_group_for_missing_pairs(all_groups, missing_members, max_frequency_groups)
 

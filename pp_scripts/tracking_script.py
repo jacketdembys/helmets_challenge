@@ -259,7 +259,7 @@ def modified_valid_group_identification(all_groups, appearance_threshold=0.2):
     
 
     return max_frequency_groups, intersections_with_frequencies
-    
+
 
 def find_missing_pair_member(max_frequency_groups, intersections_with_frequencies):
 
@@ -283,6 +283,39 @@ def find_missing_pair_member(max_frequency_groups, intersections_with_frequencie
                     # Find the missing members by subtracting the single member from the valid group
                     missing_members_in_group = valid_group - group_set
 
+                    if missing_members_in_group:
+                        # If there are missing members, record them
+                        missing_members[group_str] = missing_members_in_group
+
+    return missing_members
+
+def modified_find_missing_pair_member(max_frequency_groups, intersections_with_frequencies):
+
+    missing_members = {}
+
+    # Convert the string representation back to sets for valid groups
+    valid_groups = {element: eval(group_str) for element, group_str in max_frequency_groups.items()}
+    print(valid_groups)
+    # Iterate over all the groups
+    for element, groups in intersections_with_frequencies.items():
+        for group_str, frequency in groups.items():
+            group_set = eval(group_str)  # Convert the string representation back to a set
+
+            # We're only interested in non-valid, single-member groups.
+            # if len(group_set) == 1:
+                # Find the valid group associated with this single member
+            member = next(iter(group_set))  # Get the single member
+            valid_group = valid_groups.get(member)
+
+            if valid_group == group_set:
+                continue
+            
+            else:
+
+                if valid_group:
+                    # Find the missing members by subtracting the single member from the valid group
+                    missing_members_in_group = valid_group - group_set
+    
                     if missing_members_in_group:
                         # If there are missing members, record them
                         missing_members[group_str] = missing_members_in_group
