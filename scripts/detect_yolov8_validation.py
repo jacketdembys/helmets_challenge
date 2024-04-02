@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 import sys
+import wandb
 from ultralytics import YOLO
 from wandb.integration.ultralytics import add_wandb_callback
 
@@ -16,47 +17,41 @@ def elapsed_time(start_time, end_time):
 
 
 if __name__ == "__main__":
+
 	start_time = time.monotonic()
 
 	# params to choose from
-	inference_on = "images" # images / videos
+	ksplit = 1
 	devices = 1
+	inference_on = "images" # images / videos
+
+	if inference_on == "videos":
+		runs = [
+			
+		]
+	
+
+	run = wandb.init()
+	artifact = run.use_artifact('jacketdembys/helmets-challenge/{}:best'.format(runs[ksplit-1]), type='results')
+	artifact_dir = artifact.download()
 
 	# Load a model
 	#yolo_v8 = "n"   # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x 
 	#model = YOLO("yolov8"+yolo_v8+".pt")  # load a pretrained model
-	model = YOLO("../../aicity2024_track5/weights/yolov8l-change-augment-no-backbone-freeze.pt")
-
+	model = YOLO(artifact_dir+"/best.pt")
 	device = 0 if devices == 1 else [i for i in range(devices)]
 	add_wandb_callback(model)
 
 	# Predict with loaded model
-	path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images/fold1"
-	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/train/image_folds/fold2/"
-	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/images_old/"
-	#path_data = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/dataset/val/images/"
-	#path_results="/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_test/"
+	path_data = "/home/retina/dembysj/dataset/val/"
 	path_results="results/"	
 
-	# Loop through all the video folders
-	"""
-	for id in range(1, 101):
-
-		video_id = id
-		if len(str(id)) == 1:
-			image_folder = "00"+str(video_id)+"/"
-		elif len(str(id)) == 2:
-			image_folder = "0"+str(video_id)+"/"
-		elif len(str(id)) == 3:
-			image_folder = str(video_id)+"/"
-	"""
-			
-	#image_name = "00000100.jpg" 
 	results = model.predict(
-		source=path_data + "095_00000158.jpg", #+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
-		conf=0.5,
-		project="results",
-		name="test_images_change_augment_0.5",  #image_folder,								 
+		source=path_data, #+image_folder, #+image_name,					# you can specify a video folder name containing all the extracted frames or a specific frame
+		conf=0.1,
+		iou=0.1,
+		project=path_results,
+		name= "ksplit"+str(ksplit),  #image_folder,								 
 		save=True,  									# save plot result
         save_frames=True,
 		save_crop=True,
