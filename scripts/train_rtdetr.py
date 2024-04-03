@@ -49,7 +49,7 @@ if __name__ == '__main__':
                       #freeze=10,
                       #save_json=True, 
                       conf=0.001, 
-                      iou=0.5,
+                      #iou=0.5,
                       #lr0=0.001,
                       #optimizer="AdamW", 
                       #seed=0,

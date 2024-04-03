@@ -4,6 +4,7 @@ import time
 
 import numpy as np
 import csv
+import argparse
 
 
 
@@ -43,7 +44,9 @@ def compute_iou(box1, box2):
     
     return iou
 
-def compute_precision_recall(gt_boxes, pred_boxes, threshold=0.5):
+
+
+def compute_precision_recall_old(gt_boxes, pred_boxes, threshold=0.1):
     """
     Compute precision and recall given ground truth and predicted bounding boxes.
     Args:
@@ -69,12 +72,65 @@ def compute_precision_recall(gt_boxes, pred_boxes, threshold=0.5):
         else:
             false_positives += 1
             
+    print("True Positives:", true_positives)
     false_negatives = len(gt_boxes) - true_positives
+
+    print("False Negatives:", false_negatives)
     
     precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
     recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
     
+    print("Recall:", recall)
+
     return precision, recall
+
+
+def compute_precision_recall(gt_boxes, pred_boxes, threshold=0.1):
+    """
+    Compute precision and recall given ground truth and predicted bounding boxes.
+    Args:
+        gt_boxes (list): List of ground truth bounding boxes.
+        pred_boxes (list): List of predicted bounding boxes.
+        threshold (float): IoU threshold for matching.
+    Returns:
+        float: Precision
+        float: Recall
+    """
+    true_positives = 0
+    false_positives = 0
+    false_negatives = 0
+    
+    # Track which ground truth bounding boxes have been matched
+    matched_gt = set()
+    
+    # Iterate over each predicted bounding box
+    for pred_box in pred_boxes:
+        max_iou = 0
+        for i, gt_box in enumerate(gt_boxes):
+            iou = compute_iou(pred_box, gt_box)
+            if iou > max_iou:
+                max_iou = iou
+                max_iou_idx = i
+        if max_iou >= threshold:
+            # If IoU is above the threshold, consider it a true positive
+            true_positives += 1
+            # Mark the matched ground truth bounding box
+            matched_gt.add(max_iou_idx)
+        else:
+            # Otherwise, count it as a false positive
+            false_positives += 1
+    
+    # Count the unmatched ground truth bounding boxes as false negatives
+    false_negatives = len(gt_boxes) - len(matched_gt)
+    
+    # Calculate precision and recall
+    precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
+    recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
+    
+    return precision, recall
+
+
+
 
 def compute_f1_score(precision, recall):
     """
@@ -141,66 +197,115 @@ if __name__ == "__main__":
     # Example usage:
     start_time = time.time()
 
+    parser = argparse.ArgumentParser(description="Finding the aggregated cross-validation results")
+    parser.add_argument('-gt', type=str, help='groung truth paths', default='/home/retina/dembysj/gt/')
+    parser.add_argument('-pred', type=str, help='prediction paths', default='results_wo_pp/')
+    args = parser.parse_args()
+
+
     # Define the filenames for the files containing bounding box coordinates
-    gt_filename = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/gt.txt"
-    pred_filename = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/gt.txt"
+    #gt_filename = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/gt.txt"
+    #pred_filename = "/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/gt.txt"
 
     #ground_truth_boxes = pd.read_csv("/home/retina/dembysj/Dropbox/WCCI2024/challenges/aicity2024_track5/aicity2024_track5_train/gt.txt", header=None, sep=",")
     #ground_truth_boxes = np.array(ground_truth_boxes)  #[:,2:6]
     #yolo_pred_boxes = ground_truth_boxes.copy()
 
-    # Read ground truth and predicted bounding box coordinates from files
-    ground_truth_boxes = read_bounding_boxes_from_file(gt_filename)
-    predicted_boxes = read_bounding_boxes_from_file(pred_filename)
+    xval_all_precision = []
+    xval_all_recall = []
+    xval_all_f1_score = []
+    xval_all_map = []
+    xval_all_map_95 = []
+
+    for i in range(1,11,1):
+
+        # Define the filenames for the files containing bounding box coordinates
+        gt_filename = f'{args.gt}ksplit{i}/combined_ksplit{i}.txt'
+        pred_filename = f'{args.pred}ksplit{i}/combined_ksplit{i}.txt'
+
+        # Read ground truth and predicted bounding box coordinates from files
+        ground_truth_boxes = read_bounding_boxes_from_file(gt_filename)
+        predicted_boxes = read_bounding_boxes_from_file(pred_filename)
 
 
-    all_precision = []
-    all_recall = []
-    all_f1_score = []
-    all_map = []
+        all_precision = []
+        all_recall = []
+        all_f1_score = []
+        all_map = []
+        all_map_95 = []
 
-    # Iterate over each video ID present in the ground truth data
-    for video_id, gt_boxes in ground_truth_boxes.items():
-        # Check if there are corresponding predicted bounding boxes for this video ID
-        if video_id in predicted_boxes:
-            # Retrieve predicted bounding boxes for this video ID
-            pred_boxes = predicted_boxes[video_id]
+        # Iterate over each video ID present in the ground truth data
+        for video_id, gt_boxes in ground_truth_boxes.items():
+            # Check if there are corresponding predicted bounding boxes for this video ID
+            if video_id in predicted_boxes:
+                # Retrieve predicted bounding boxes for this video ID
+                pred_boxes = predicted_boxes[video_id]
 
-            # Compute evaluation metrics for the current video ID
-            map50_95, map50 = compute_map(gt_boxes, pred_boxes)
-            precision, recall = compute_precision_recall(gt_boxes, pred_boxes)
-            f1_score = compute_f1_score(precision, recall)
+                # Compute evaluation metrics for the current video ID
+                map50_95, map50 = compute_map(gt_boxes, pred_boxes)
+                precision, recall = compute_precision_recall(gt_boxes, pred_boxes)
+                f1_score = compute_f1_score(precision, recall)
 
-            # Print the evaluation metrics for the current video ID
-            print(f"Metrics for Video ID {video_id}:")
-            print("MAP50-95:", map50_95)
-            print("MAP50:", map50)
-            print("Precision:", precision)
-            print("Recall:", recall)
-            print("F1 Score:", f1_score)
-            print()
+                # Print the evaluation metrics for the current video ID
+                print()    
+                print(f"Metrics for Ksplit {i} - Video ID {video_id}:")
+                print("MAP50-95:", map50_95)
+                print("MAP50:", map50)
+                print("Precision:", precision)
+                print("Recall:", recall)
+                print("F1 Score:", f1_score)
+                print()
 
-            # Store evaluation metrics for this video ID
-            all_precision.append(precision)
-            all_recall.append(recall)
-            all_f1_score.append(f1_score)
-            all_map.append(map50)
+                # Store evaluation metrics for this video ID
+                all_precision.append(precision)
+                all_recall.append(recall)
+                all_f1_score.append(f1_score)
+                all_map.append(map50)
+                all_map_95.append(map50_95)
 
-        else:
-            print(f"No predicted bounding boxes found for Video ID {video_id}")
+            else:
+                print(f"No predicted bounding boxes found for Video ID {video_id}")
+
+
+        # Compute aggregated evaluation metrics over all video IDs
+        overall_precision = np.mean(all_precision)
+        overall_recall = np.mean(all_recall)
+        overall_f1_score = np.mean(all_f1_score)
+        overall_map = np.mean(all_map)
+        overall_map_95 = np.mean(all_map_95)
+
+        # Print the aggregated evaluation metrics
+        print()
+        print(f"Overall Metrics for Ksplit {i}:")
+        print("ksplit {} overall Precision: {}".format(i, overall_precision))
+        print("ksplit {} overall Recall: {}".format(i, overall_recall))
+        print("ksplit {} overall F1 Score: {}".format(i, overall_f1_score))
+        print("ksplit {} overall mAP50: {}".format(i, overall_map))
+        print("ksplit {} overall mAP50_95: {}".format(i, overall_map_95))
+
+        # Store evaluation metrics for this video ID
+        xval_all_precision.append(overall_precision)
+        xval_all_recall.append(overall_recall)
+        xval_all_f1_score.append(overall_f1_score)
+        xval_all_map.append(overall_map)
+        xval_all_map_95.append(overall_map_95)
 
 
     # Compute aggregated evaluation metrics over all video IDs
-    overall_precision = np.mean(all_precision)
-    overall_recall = np.mean(all_recall)
-    overall_f1_score = np.mean(all_f1_score)
-    overall_map = np.mean(all_map)
+    overall_xval_precision = np.mean(xval_all_precision)
+    overall_xval_recall = np.mean(xval_all_recall)
+    overall_xval_f1_score = np.mean(xval_all_f1_score)
+    overall_xval_map = np.mean(xval_all_map)
+    overall_xval_map_95 = np.mean(xval_all_map_95)
 
     # Print the aggregated evaluation metrics
-    print("Overall Precision:", overall_precision)
-    print("Overall Recall:", overall_recall)
-    print("Overall F1 Score:", overall_f1_score)
-    print("Overall mAP50:", overall_map)
+    print()
+    print(f"Xval Overall Metrics:")
+    print("Xval overall Precision: {}".format(overall_xval_precision))
+    print("Xval overall Recall: {}".format(overall_xval_recall))
+    print("Xval overall F1 Score: {}".format(overall_xval_f1_score))
+    print("Xval overall mAP50: {}".format(overall_xval_map))
+    print("Xval overall mAP50_95: {}".format(overall_xval_map_95))
 
 
     end_time = time.time()

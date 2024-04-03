@@ -2,11 +2,18 @@ import numpy as np
 import pandas as pd
 import os
 import sys
+import argparse
 from pathlib import Path
 
 if __name__ == '__main__':
 
-    path = "results_final/"
+    parser = argparse.ArgumentParser(description="Build the results file")
+    parser.add_argument('-path', type=str, default='results_wo_pp/', help='path to the folder holding the results')
+    parser.add_argument('-ksplit', type=str, default='ksplit1/', help='ksplit from the cross-validation experiment')
+    args = parser.parse_args()
+
+    #path = "results_final/"
+    path = os.path.join(args.path, args.ksplit) 
     predicted_labels = Path(path)
     predicted_labels = sorted(predicted_labels.rglob("*.txt"))
     #print(paths)
@@ -21,7 +28,9 @@ if __name__ == '__main__':
         print("Prediction ... Processing video id [{}] - frame id [{}]".format(videoid, frameid))
 
         df = pd.read_csv(predicted_labels[i], header=None, sep=" ")
-        if len(df.columns) == 6:
+        if len(df.columns) == 5:
+            df.columns = ["class", "bb_left", "bb_top","bb_width", "bb_height"]
+        elif len(df.columns) == 6:
             df.columns = ["class", "bb_left", "bb_top","bb_width", "bb_height", "confidence"]
         elif len(df.columns) == 7: 
             df.columns = ["class", "bb_left", "bb_top","bb_width", "bb_height", "confidence", "track_id"]
@@ -30,10 +39,15 @@ if __name__ == '__main__':
             if df["bb_left"][indx] == np.nan or df["bb_left"][indx] == np.Inf or df["bb_left"][indx] == -np.inf  or df["bb_top"][indx] == np.nan or df["bb_top"][indx] == np.inf or df["bb_left"][indx] == -np.inf:
                 continue
             else:
-                combined.append([videoid, frameid, df["bb_left"][indx], df["bb_top"][indx],  df["bb_width"][indx],  df["bb_height"][indx],  df["class"][indx],  df["confidence"][indx]])
+                if len(df.columns) == 5:
+                    combined.append([videoid, frameid, df["bb_left"][indx], df["bb_top"][indx],  df["bb_width"][indx],  df["bb_height"][indx],  df["class"][indx]])
+                else:
+                    combined.append([videoid, frameid, df["bb_left"][indx], df["bb_top"][indx],  df["bb_width"][indx],  df["bb_height"][indx],  df["class"][indx],  df["confidence"][indx]])
         
-
-    fdf = pd.DataFrame(combined, columns=["video_id", "frame", "bb_left", "bb_top","bb_width", "bb_height", "class", "confidence"])
+    if len(df.columns) == 5:
+        fdf = pd.DataFrame(combined, columns=["video_id", "frame", "bb_left", "bb_top","bb_width", "bb_height", "class"])
+    else:
+        fdf = pd.DataFrame(combined, columns=["video_id", "frame", "bb_left", "bb_top","bb_width", "bb_height", "class", "confidence"])
 
 
 
@@ -55,7 +69,7 @@ if __name__ == '__main__':
     fdf = fdf.sort_values(by=["video_id","frame"])
 
     
-    fdf.to_csv(path+"vigir_submission_9.txt", 
+    fdf.to_csv(os.path.join(path, "combined_"+args.ksplit+".txt"), 
                     index=False, 
                     header=None)
     
